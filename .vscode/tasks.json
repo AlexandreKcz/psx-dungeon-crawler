@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Debug",
+      "type": "shell",
+      "command": "make BUILD=Debug",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Build Release",
+      "type": "shell",
+      "command": "make",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "make clean",
+      "group": {
+        "kind": "build"
+    }
+    },
+        {
+      "label": "Build ISO",
+      "type": "shell",
+      "command": "copy ${workspaceRootFolderName}.elf main.elf; copy ${workspaceRootFolderName}.map main.map; copy ${workspaceRootFolderName}.ps-exe MAIN.EXE; cd ${workspaceRoot}/mkpsxiso; ./mkpsxiso.exe -y ./cuesheet.xml; echo build complete",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+    }
+  ]
+}

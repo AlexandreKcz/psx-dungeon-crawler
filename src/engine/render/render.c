@@ -1,0 +1,106 @@
+#include "../render.h"
+#include "render_internal.h"
+
+#include <libetc.h>
+#include <stdio.h>
+#include <libgs.h>
+#include <libgpu.h>
+
+#include "../types.h"
+
+int screen_width, screen_height;
+
+GsOT        orderingTables[2];
+GsOT_TAG    minorOrderingTable[2][1<<OT_LENGTH];
+PACKET GPUOutputPacket[2][PACKETMAX];
+short       currentBuffer;
+
+Color*      backgroundColor;
+
+void initialize_screen() {
+    if (*(char *)0xbfc7ff52 == 'E')
+        set_screen_mode(SCREEN_MODE_PAL);
+    else
+        set_screen_mode(SCREEN_MODE_NTSC);
+
+    SetDispMask(1);
+    ResetGraph(0);
+    clear_vram();
+
+    GsInitGraph(screen_width, screen_height, GsINTER|GsOFSGPU, 1, 0);
+    GsDefDispBuff(0, 0, 0, screen_height);
+    initialize_oredering_table();
+    color_create(0, 0, 0, &backgroundColor);
+}
+
+void set_screen_mode(int mode) {
+    screen_width = 320;
+
+    if(mode == SCREEN_MODE_PAL) {
+        screen_height = SCREEN_HEIGHT_PAL;
+        printf("Setting video mode to PAL \n");
+        SetVideoMode(1);
+    } else {
+        screen_height = SCREEN_HEIGHT_NTSC;
+        printf("Setting video mode to NTSC \n");
+        SetVideoMode(0);
+    }
+
+    printf("Screen resolution : %d x %d \n", screen_width, screen_height);
+    printf("Playstation video mode : %d \n", GetVideoMode());
+
+    GsInitGraph(screen_width, screen_height, GsINTER|GsOFSGPU, 1, 0);
+    GsDefDispBuff(0, 0, 0, screen_height);
+}
+
+void clear_vram(){
+    RECT rectTL;
+    setRECT(&rectTL, 0, 0, 1024, 512);
+    ClearImage2(&rectTL, 0, 0, 0);
+    DrawSync(0);
+}
+
+void initialize_oredering_table(){
+    GsClearOt(0, 0, &orderingTables[GsGetActiveBuff()]);
+
+    orderingTables[0].length = OT_LENGTH;
+    orderingTables[1].length = OT_LENGTH;
+    orderingTables[0].org = minorOrderingTable[0];
+    orderingTables[1].org = minorOrderingTable[1];
+
+    GsClearOt(0, 0, &orderingTables[0]);
+    GsClearOt(0, 0, &orderingTables[1]);
+}
+
+void initialize_debug_font() {
+    FntLoad(960, 256);
+	SetDumpFnt(FntOpen(5, 20, 320, 240, 0, 512));
+}
+
+void render_update() {
+    clear_display();
+    draw();
+    display();
+}
+
+void clear_display() {
+    currentBuffer = GsGetActiveBuff();
+    FntFlush(-1);
+    GsSetWorkBase((PACKET*)GPUOutputPacket[currentBuffer]);
+    GsClearOt(0, 0, &orderingTables[currentBuffer]);
+}
+
+void draw() {
+    currentBuffer = GsGetActiveBuff();
+
+    //sprite draw here
+}
+
+void display() {
+    currentBuffer = GsGetActiveBuff();
+    DrawSync(0);
+    VSync(0);
+    GsSwapDispBuff();
+    GsSortClear(backgroundColor->r, backgroundColor->g, backgroundColor->b, &orderingTables[currentBuffer]);
+    GsDrawOt(&orderingTables[currentBuffer]);
+}

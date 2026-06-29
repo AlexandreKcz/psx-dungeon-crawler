@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<iso_project image_name="game.bin" cue_sheet="game.cue" no_xa="1">
+	<track type="data">
+		<license file="../LICENSEE.DAT"/>
+		<directory_tree>
+			<file name="SYSTEM.CNF"	type="data"	source="../SYSTEM.CNF"/>
+			<file name="MAIN.EXE"	type="data"	source="../MAIN.EXE"/>
+			<!-- Add your own files or folders here -->
+			<!-- <file name="EXEMPLE.TIM"	type="data"	source="../DATA/EXEMPLE.TIM"/> -->
+			<dummy sectors="2000"/>
+		</directory_tree>
+	</track>
+</iso_project>
