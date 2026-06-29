@@ -2,3 +2,4 @@
 
 void game_start();
 void game_update();
+void game_draw();

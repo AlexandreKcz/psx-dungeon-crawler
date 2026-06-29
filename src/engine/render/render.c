@@ -7,6 +7,7 @@
 #include <libgpu.h>
 
 #include "../types.h"
+#include "../../game/game.h"
 
 int screen_width, screen_height;
 
@@ -92,6 +93,8 @@ void clear_display() {
 
 void draw() {
     currentBuffer = GsGetActiveBuff();
+
+    game_draw();
 
     //sprite draw here
 }

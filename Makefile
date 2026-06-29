@@ -8,6 +8,7 @@ src/engine/engine.c \
 src/engine/system/system.c \
 src/engine/render/render.c \
 src/engine/types/types.c \
+src/engine/prims/prims.c \
 src/game/game.c
 
 CPPFLAGS += -Ithird_party/psyq-iwyu/include
