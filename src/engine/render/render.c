@@ -6,8 +6,7 @@
 #include <libgs.h>
 #include <libgpu.h>
 
-#include "../types.h"
-#include "../../game/game.h"
+#include "../prims/prims.h"
 
 int screen_width, screen_height;
 
@@ -17,6 +16,9 @@ PACKET GPUOutputPacket[2][PACKETMAX];
 short       currentBuffer;
 
 Color*      backgroundColor;
+
+Line* linesToDraw[PRIMS_ARRAY_SIZE];
+int crntLinesNumber = 0;
 
 void initialize_screen() {
     if (*(char *)0xbfc7ff52 == 'E')
@@ -32,6 +34,12 @@ void initialize_screen() {
     GsDefDispBuff(0, 0, 0, screen_height);
     initialize_oredering_table();
     color_create(0, 0, 0, &backgroundColor);
+
+    for(int i = 0; i < (sizeof(linesToDraw) / sizeof(linesToDraw[0])); i++) {
+        *(linesToDraw + i) = NULL;
+    }
+
+    crntLinesNumber = 0;
 }
 
 void set_screen_mode(int mode) {
@@ -78,6 +86,16 @@ void initialize_debug_font() {
 	SetDumpFnt(FntOpen(5, 20, 320, 240, 0, 512));
 }
 
+void line_register(Line* line) {
+    if(crntLinesNumber + 1 > PRIMS_ARRAY_SIZE - 1){
+        printf("Cannot register anymore lines, increase PRIMS_ARRAY_SIZE in render_internal.h to more than : %d\n", PRIMS_ARRAY_SIZE);
+        return;
+    }
+
+    *(linesToDraw + crntLinesNumber++) = line;
+    printf("Registering new line in linesToDraw currently : %d \n", crntLinesNumber);
+}
+
 void render_update() {
     clear_display();
     draw();
@@ -94,7 +112,9 @@ void clear_display() {
 void draw() {
     currentBuffer = GsGetActiveBuff();
 
-    game_draw();
+    for(int i = 0; i < (sizeof(linesToDraw) / sizeof(linesToDraw[0])); i++) {
+        line_draw(*(linesToDraw + i));
+    }
 
     //sprite draw here
 }

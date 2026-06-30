@@ -6,11 +6,13 @@
 
 #include "../engine/types.h"
 #include "../engine/prims/prims.h"
-#include "../engine/render/render_internal.h";
+#include "../engine/render/render_internal.h"
 
 int cnt;
 Color* white;
 Box* box;
+
+Line* line;
 
 void game_start(){
     cnt = 0;
@@ -25,12 +27,11 @@ void game_start(){
 
     color_create(255, 255, 255, &white);
     box_create(pos, dim, *white, &box);
+    
+    for(int i = 0; i < 10; i++)
+        line_create(pos, dim, *white, &line);
 }
 
 void game_update(){
     FntPrint("Babaji : %d", cnt++);
-}
-
-void game_draw(){
-    box_draw(box);
 }

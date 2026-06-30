@@ -9,3 +9,5 @@
 
 #define OT_LENGTH 1
 #define PACKETMAX 300
+
+#define PRIMS_ARRAY_SIZE 10

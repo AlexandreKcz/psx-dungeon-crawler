@@ -2,9 +2,12 @@
 
 #include <stdlib.h>
 
+#include "../render.h"
+
 void line_create(vector2 start_pos, vector2 end_pos, Color color, Line** line) {
     *line = malloc3(sizeof(Line));
     line_init(start_pos, end_pos, color, *line);
+    line_register(*line);
 }
 
 void line_init(vector2 start_pos, vector2 end_pos, Color color, Line* line){
