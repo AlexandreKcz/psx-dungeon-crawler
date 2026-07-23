@@ -121,9 +121,9 @@ void render_update() {
 
 void clear_display() {
     currentBuffer = GsGetActiveBuff();
-    FntFlush(-1);
-    GsSetWorkBase((PACKET*)GPUOutputPacket[currentBuffer]);
     GsClearOt(0, 0, &orderingTables[currentBuffer]);
+    GsSortClear(backgroundColor->r, backgroundColor->g, backgroundColor->b, &orderingTables[currentBuffer]);
+    GsSetWorkBase((PACKET*)GPUOutputPacket[currentBuffer]);
 }
 
 void draw() {
@@ -146,10 +146,10 @@ void draw() {
 }
 
 void display() {
-    currentBuffer = GsGetActiveBuff();
     DrawSync(0);
     VSync(0);
     GsSwapDispBuff();
-    GsSortClear(backgroundColor->r, backgroundColor->g, backgroundColor->b, &orderingTables[currentBuffer]);
+    currentBuffer = GsGetActiveBuff();
     GsDrawOt(&orderingTables[currentBuffer]);
+    FntFlush(-1);
 }

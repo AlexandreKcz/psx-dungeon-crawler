@@ -10,6 +10,7 @@ src/engine/render/render.c \
 src/engine/types/types.c \
 src/engine/types/array_list.c \
 src/engine/prims/prims.c \
+src/engine/controller/controller.c \
 src/game/game.c
 
 CPPFLAGS += -Ithird_party/psyq-iwyu/include

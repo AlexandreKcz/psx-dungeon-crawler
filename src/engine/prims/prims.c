@@ -55,7 +55,17 @@ void box_init(vector2 pos, vector2 dim, Color color, Box* box) {
 }
 
 void box_move(vector2 newPos, Box* box){
-    box_init(newPos, box->dimensions, box->color, box);
+    //box_init(newPos, box->dimensions, box->color, box);
+
+    vector2 topLeft = { .vx = newPos.vx, .vy = newPos.vy };
+    vector2 topRight = { .vx = (newPos.vx + box->dimensions.vx), .vy = newPos.vy };
+    vector2 botRight = { .vx = (newPos.vx + box->dimensions.vx), .vy = (newPos.vy + box->dimensions.vy) };
+    vector2 botLeft = { .vx = newPos.vx, .vy = (newPos.vy + box->dimensions.vy) };
+
+    line_move(topLeft,    topRight,   box->lines[0]);
+    line_move(topRight,   botRight,   box->lines[1]);
+    line_move(botRight,   botLeft,    box->lines[2]);
+    line_move(botLeft,    topLeft,    box->lines[3]);
 }
 
 void box_draw(Box* box){

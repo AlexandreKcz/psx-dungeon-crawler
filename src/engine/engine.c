@@ -5,6 +5,7 @@
 #include "system/system.h"
 #include "render.h"
 #include "constants.h"
+#include "controller.h"
 #include "../game/game.h"
 
 void initialize(){
@@ -15,7 +16,8 @@ void initialize(){
     initialize_screen();
     initialize_debug_font();
 
-    //initialize pad
+    //controller.c
+    pad_initialize();
     //load cd data
 
     printf("End of game initialization \n");
@@ -30,7 +32,7 @@ void start(){
 
 void update()
 {
-    //run pad_update();
+    pad_update();
 
     game_update();
 
