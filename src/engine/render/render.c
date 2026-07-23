@@ -7,6 +7,7 @@
 #include <libgpu.h>
 
 #include "../prims/prims.h"
+#include "../types/array_list.h"
 
 int screen_width, screen_height;
 
@@ -17,8 +18,12 @@ short       currentBuffer;
 
 Color*      backgroundColor;
 
+Array_List* lines_list;
+
+/*
 Line* linesToDraw[PRIMS_ARRAY_SIZE];
 int crntLinesNumber = 0;
+*/
 
 void initialize_screen() {
     if (*(char *)0xbfc7ff52 == 'E')
@@ -35,11 +40,16 @@ void initialize_screen() {
     initialize_oredering_table();
     color_create(0, 0, 0, &backgroundColor);
 
+    lines_list = array_list_create(50, sizeof(Line*));
+    printf("array list max length : %i \n",lines_list->max_length);
+
+    /*
     for(int i = 0; i < (sizeof(linesToDraw) / sizeof(linesToDraw[0])); i++) {
         *(linesToDraw + i) = NULL;
     }
 
     crntLinesNumber = 0;
+    */
 }
 
 void set_screen_mode(int mode) {
@@ -87,6 +97,12 @@ void initialize_debug_font() {
 }
 
 void line_register(Line* line) {
+
+    printf("Registering new line\n");
+
+    array_list_append(lines_list, &line);
+
+    /*
     if(crntLinesNumber + 1 > PRIMS_ARRAY_SIZE - 1){
         printf("Cannot register anymore lines, increase PRIMS_ARRAY_SIZE in render_internal.h to more than : %d\n", PRIMS_ARRAY_SIZE);
         return;
@@ -94,6 +110,7 @@ void line_register(Line* line) {
 
     *(linesToDraw + crntLinesNumber++) = line;
     printf("Registering new line in linesToDraw currently : %d \n", crntLinesNumber);
+    */
 }
 
 void render_update() {
@@ -112,9 +129,18 @@ void clear_display() {
 void draw() {
     currentBuffer = GsGetActiveBuff();
 
+    for(int i = 0; i < lines_list->length; i++){
+        Line* line = *(Line**) array_list_get(lines_list, i);
+        line_draw(
+            line
+        );
+    }
+
+    /*
     for(int i = 0; i < (sizeof(linesToDraw) / sizeof(linesToDraw[0])); i++) {
         line_draw(*(linesToDraw + i));
     }
+    */
 
     //sprite draw here
 }

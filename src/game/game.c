@@ -12,7 +12,7 @@ int cnt;
 Color* white;
 Box* box;
 
-Line* line;
+Line* lines[10];
 
 void game_start(){
     cnt = 0;
@@ -24,12 +24,13 @@ void game_start(){
     vector2 pos = { .vx = SCREEN_WIDTH_COMMON / 2, .vy = SCREEN_HEIGHT_PAL / 2 };
     vector2 dim = { .vx = 50, .vy = 50 };
 
-
     color_create(255, 255, 255, &white);
+    printf("Creating Box : \n");
     box_create(pos, dim, *white, &box);
     
-    for(int i = 0; i < 10; i++)
-        line_create(pos, dim, *white, &line);
+    printf("Creating Lines : \n");
+    for(int i = 0; i < 5; i++)
+        line_create(pos, dim, *white, &lines[i]);
 }
 
 void game_update(){
