@@ -29,7 +29,7 @@ void game_start(){
     box_create(pos, dim, *white, &box);
     
     printf("Creating Lines : \n");
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 25; i++)
         line_create(pos, dim, *white, &lines[i]);
 }
 

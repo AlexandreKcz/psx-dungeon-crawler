@@ -40,7 +40,7 @@ void initialize_screen() {
     initialize_oredering_table();
     color_create(0, 0, 0, &backgroundColor);
 
-    lines_list = array_list_create(50, sizeof(Line*));
+    lines_list = array_list_create(50, 5, sizeof(Line*));
     printf("array list max length : %i \n",lines_list->max_length);
 
     /*

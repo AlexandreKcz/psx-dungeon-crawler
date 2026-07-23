@@ -30,7 +30,7 @@ void line_draw(Line* line) {
 void line_free(Line *line){
     if(line == NULL)
         return;
-    
+
     free3(line);
 }
 
