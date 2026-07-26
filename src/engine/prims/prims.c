@@ -1,5 +1,6 @@
 #include "prims.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "../render.h"
@@ -49,6 +50,36 @@ void box_init(vector2 pos, vector2 dim, Color color, Box* box) {
     line_create(topRight,   botRight,   color,  &box->lines[1]);
     line_create(botRight,   botLeft,    color,  &box->lines[2]);
     line_create(botLeft,    topLeft,    color,  &box->lines[3]);
+
+    box->dimensions = dim;
+    box->color = color;
+}
+
+void box_create_mask(vector2 pos, vector2 dim, Color color, short mask[], Box** box){
+    *box = malloc3(sizeof(Box));
+    box_init_mask(pos, dim, color, mask, *box);
+}
+
+void box_init_mask(vector2 pos, vector2 dim, Color color, short mask[], Box* box){
+
+    if(sizeof(&mask) / sizeof(short) > 4){
+        printf("Invalid mask lenght to create box, mask must be a 4 short array");
+        return;
+    }
+
+    vector2 topLeft = { .vx = pos.vx, .vy = pos.vy };
+    vector2 topRight = { .vx = (pos.vx + dim.vx), .vy = pos.vy };
+    vector2 botRight = { .vx = (pos.vx + dim.vx), .vy = (pos.vy + dim.vy) };
+    vector2 botLeft = { .vx = pos.vx, .vy = (pos.vy + dim.vy) };
+
+    if(mask[0] > 0)
+        line_create(topLeft,    topRight,   color,  &box->lines[0]);
+    if(mask[1] > 0)
+        line_create(topRight,   botRight,   color,  &box->lines[1]);
+    if(mask[2] > 0)
+        line_create(botRight,   botLeft,    color,  &box->lines[2]);
+    if(mask[3] > 0)
+        line_create(botLeft,    topLeft,    color,  &box->lines[3]);
 
     box->dimensions = dim;
     box->color = color;
