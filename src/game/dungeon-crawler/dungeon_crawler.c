@@ -92,6 +92,32 @@ void draw_player(){
     line_move(line_start, line_end, player->visual);
 }
 
+vector2 player_direction_vector(){
+
+    vector2 dir = { .vx = 0, .vy = 0 };
+
+    switch (player->direction){
+        case 0: //north
+            dir.vy = -1;
+            dir.vx = 0;
+            break;
+        case 1: //east
+            dir.vy = 0;
+            dir.vx = 1;
+            break;
+        case 2: //south
+            dir.vy = 1;
+            dir.vx = 0;
+            break;
+        case 3: //west
+            dir.vy = 0;
+            dir.vx = -1;
+            break;
+    }
+
+    return dir;
+}
+
 void player_input(){
     if(pad_check_pressed(pad1Right)){
         if(player->direction == 3)

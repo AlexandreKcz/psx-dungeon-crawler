@@ -10,4 +10,5 @@ void create_player();
 void draw_dungeon();
 void draw_player();
 Player* get_player();
+vector2 player_direction_vector();
 void player_input();
