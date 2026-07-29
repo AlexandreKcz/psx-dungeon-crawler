@@ -14,9 +14,9 @@ Box* box[25];
 vector2 offset = { .vx = 50, .vy = 50 };
 
 short dungeon[5][5][4] = {
-    { {0,0,1,0}, {0,0,1,0}, {1,1,1,1}, {0,0,1,0},{0,0,1,0} },
+    { {0,0,1,0}, {0,0,1,0}, {1,1,1,1}, {0,0,0,0},{0,0,1,0} },
     { {0,0,0,1}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},{0,1,0,0} },
-    { {0,0,0,1}, {0,0,0,0}, {0,1,0,0}, {0,0,0,0},{0,1,0,0} },
+    { {0,0,0,1}, {0,0,0,1}, {0,0,0,0}, {0,0,0,0},{0,1,0,0} },
     { {0,0,0,1}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},{0,1,0,0} },
     { {1,0,0,0}, {1,1,1,1}, {1,0,0,0}, {1,0,0,0},{1,0,0,0} },
 };
@@ -118,6 +118,33 @@ vector2 player_direction_vector(){
     return dir;
 }
 
+//1 if collision else 
+short player_check_collision(){
+    vector2 dir = player_direction_vector();
+
+    short current_cell = dungeon[player->position.vy][player->position.vx][player->direction];
+
+    if(current_cell > 0) 
+        return 1;
+
+    vector2 lookat_cell_position = vector_add(&dir, &player->position);
+
+    if(
+        lookat_cell_position.vx < 0 || lookat_cell_position.vx > (sizeof(dungeon[0]) / sizeof(dungeon[0][0])) || 
+        lookat_cell_position.vy < 0 || lookat_cell_position.vy > (sizeof(dungeon[0]) / (sizeof(dungeon[0]) / sizeof(dungeon[0][0])))
+    )
+        return 1;
+
+    short reversed_dir = (player->direction + 2) % 4;
+
+    short lookat_cell = dungeon[lookat_cell_position.vy][lookat_cell_position.vx][reversed_dir];
+
+    if(lookat_cell > 0) 
+        return 1;
+
+    return 0;
+}
+
 void player_input(){
     if(pad_check_pressed(pad1Right)){
         if(player->direction == 3)
@@ -134,6 +161,9 @@ void player_input(){
     }
 
     if(pad_check_pressed(pad1Up)){
+        if(player_check_collision() > 0)
+            return;
+
         switch(player->direction){
             case 0:
                 player->position.vy--;

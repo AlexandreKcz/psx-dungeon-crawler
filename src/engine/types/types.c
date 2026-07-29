@@ -15,3 +15,12 @@ void color_free(Color *color){
 
 	free3(color);
 }
+
+vector2 vector_add(vector2* vec1, vector2* vec2){
+	vector2 addition = {
+		.vx = vec1->vx + vec2->vx,
+		.vy = vec1->vy + vec2->vy
+	};
+
+	return  addition;
+}
