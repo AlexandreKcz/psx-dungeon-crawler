@@ -12,3 +12,4 @@ void draw_player();
 Player* get_player();
 vector2 player_direction_vector();
 void player_input();
+void load_dungeon_sprites();

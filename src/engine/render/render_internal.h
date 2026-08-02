@@ -7,7 +7,7 @@
 #define SCREEN_HEIGHT_PAL 256
 #define SCREEN_HEIGHT_NTSC 240
 
-#define OT_LENGTH 1
+#define OT_LENGTH 9
 #define PACKETMAX 300
 
 #define PRIMS_ARRAY_SIZE 10

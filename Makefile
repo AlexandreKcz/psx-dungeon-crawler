@@ -12,6 +12,7 @@ src/engine/types/array_list.c \
 src/engine/prims/prims.c \
 src/engine/controller/controller.c \
 src/engine/cd/cd.c \
+src/engine/sprite/sprite.c \
 src/game/dungeon-crawler/dungeon_crawler.c \
 src/game/game.c
 

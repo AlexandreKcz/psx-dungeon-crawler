@@ -9,7 +9,7 @@ typedef struct array_list {
     void* items;                    //void pointer on items
 } Array_List;
 
-Array_List *array_list_create(unsigned short max_length, unsigned short chunk_size, unsigned long item_size);
+Array_List* array_list_create(unsigned short max_length, unsigned short chunk_size, unsigned long item_size);
 unsigned short array_list_append(Array_List* list, void* item);
 unsigned short array_list_fast_remove(Array_List* list, unsigned short index);
 unsigned short array_list_order_remove(Array_List* list, unsigned short index);

@@ -15,6 +15,8 @@ int cnt = 0;
 void game_start(){
     cnt = 0;
 
+    load_dungeon_sprites();
+
     create_player();
     draw_dungeon();
 }

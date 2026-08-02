@@ -2,6 +2,7 @@
 
 #include "../../engine/prims/prims.h"
 #include "../../engine/controller.h"
+#include "../../engine/sprite.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -179,4 +180,9 @@ void player_input(){
                 break;
         }
     }
+}
+
+void load_dungeon_sprites(){
+    sprite_register("BG_SPRT.TIM");
+    sprite_list_load();
 }

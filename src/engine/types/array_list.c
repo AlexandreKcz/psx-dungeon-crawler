@@ -4,6 +4,8 @@
 
 #include "./array_list.h"
 
+short log_array = 0;
+
 Array_List* array_list_create(unsigned short max_length, unsigned short chunk_size, unsigned long item_size){
     Array_List* list = malloc3(sizeof(Array_List));
 
@@ -32,7 +34,7 @@ Array_List* array_list_create(unsigned short max_length, unsigned short chunk_si
 }
 
 unsigned short array_list_append(Array_List* list, void* item){
-    printf("Appending to array list\n");
+    if(log_array > 0) printf("Appending to array list\n");
     if(!list || !list->items){
         printf("List is not initialized");
         return 0;
@@ -53,7 +55,7 @@ unsigned short array_list_append(Array_List* list, void* item){
             return 0;
         }
         list->items = realloc_items;
-        printf("Allocating new chunk for array list\n");
+        if(log_array > 0) printf("Allocating new chunk for array list\n");
     }
 
     unsigned short index = list->length;

@@ -8,6 +8,7 @@
 
 #include "../prims/prims.h"
 #include "../types/array_list.h"
+#include "../sprite.h"
 
 int screen_width, screen_height;
 
@@ -37,6 +38,12 @@ void initialize_screen() {
 
     GsInitGraph(screen_width, screen_height, GsINTER|GsOFSGPU, 1, 0);
     GsDefDispBuff(0, 0, 0, screen_height);
+
+    /*
+    GsSetOffset(screen_width / 2, screen_height / 2);
+    GsInitCoordinate2(0, 0);
+    */
+
     initialize_oredering_table();
     color_create(0, 0, 0, &backgroundColor);
 
@@ -98,7 +105,7 @@ void initialize_debug_font() {
 
 void line_register(Line* line) {
 
-    printf("Registering new line\n");
+    //printf("Registering new line\n");
 
     array_list_append(lines_list, &line);
 
@@ -121,13 +128,20 @@ void render_update() {
 
 void clear_display() {
     currentBuffer = GsGetActiveBuff();
-    GsClearOt(0, 0, &orderingTables[currentBuffer]);
-    GsSortClear(backgroundColor->r, backgroundColor->g, backgroundColor->b, &orderingTables[currentBuffer]);
     GsSetWorkBase((PACKET*)GPUOutputPacket[currentBuffer]);
+    GsClearOt(0, 0, &orderingTables[currentBuffer]);
 }
 
 void draw() {
     currentBuffer = GsGetActiveBuff();
+
+    if(get_sprite_list() != NULL){
+        for(int i = 0; i < get_sprite_list()->length; i++){
+            Sprite* sprite = array_list_get(get_sprite_list(), i);
+            //printf("Drawing sprite : %s\n", sprite->sprite_name);
+            GsSortSprite(sprite->sprite_data, &orderingTables[currentBuffer], 0);
+        }
+    }
 
     for(int i = 0; i < lines_list->length; i++){
         Line* line = *(Line**) array_list_get(lines_list, i);
@@ -135,6 +149,7 @@ void draw() {
             line
         );
     }
+
 
     /*
     for(int i = 0; i < (sizeof(linesToDraw) / sizeof(linesToDraw[0])); i++) {
@@ -146,10 +161,11 @@ void draw() {
 }
 
 void display() {
+    currentBuffer = GsGetActiveBuff();
     DrawSync(0);
     VSync(0);
     GsSwapDispBuff();
-    currentBuffer = GsGetActiveBuff();
+    GsSortClear(backgroundColor->r, backgroundColor->g, backgroundColor->b, &orderingTables[currentBuffer]);
     GsDrawOt(&orderingTables[currentBuffer]);
     FntFlush(-1);
 }
