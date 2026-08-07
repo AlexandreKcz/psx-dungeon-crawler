@@ -14,6 +14,8 @@ Color* red;
 Box* box[25];
 vector2 offset = { .vx = 50, .vy = 50 };
 
+Sprite* bg;
+
 short dungeon[5][5][4] = {
     { {0,0,1,0}, {0,0,1,0}, {1,1,1,1}, {0,0,0,0},{0,0,1,0} },
     { {0,0,0,1}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},{0,1,0,0} },
@@ -183,6 +185,10 @@ void player_input(){
 }
 
 void load_dungeon_sprites(){
-    sprite_register("BG_SPRT.TIM");
+    bg = sprite_register("BG_SPRT.TIM");
+    //printf("Adress of BG : %p\n", bg);
     sprite_list_load();
+    //((Sprite*) array_list_get(get_sprite_list(),0))->active = 1;
+    bg->active = 1;
+    printf(" Background : %d\n", bg->active);
 }

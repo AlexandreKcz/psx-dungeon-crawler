@@ -11,7 +11,7 @@ void sprite_list_init(unsigned short max_length, unsigned short chunk_size){
     sprites_list = array_list_create(max_length, chunk_size, sizeof(Sprite));
 }
 
-void sprite_register(unsigned char* sprite_name){
+Sprite* sprite_register(unsigned char* sprite_name){
     if(!sprites_list){
         printf("WARNING : sprites_list has not been initialized, initializing with default values : max_length = 500, chunk_size = 5\n");
         sprite_list_init(500, 5);
@@ -22,8 +22,16 @@ void sprite_register(unsigned char* sprite_name){
     sprite->sprite_name[31] = '\0';
     sprite->sprite_data = NULL;
     sprite->z_index = 0;
+    sprite->active = 1;
 
     array_list_append(sprites_list, sprite);
+
+    /*
+    printf("Address of sprite : %p\n", sprite);
+    printf("Adress of array sprite : %p\n", (Sprite*) array_list_get(sprites_list, sprites_list->length-1));
+    */
+
+    return (Sprite*) array_list_get(sprites_list, sprites_list->length-1);
 }
 
 void sprite_list_load(){
@@ -97,7 +105,8 @@ void sprite_create(unsigned long* image_data, Sprite* sprite){
     gs_sprite->scaley = ONE;
 
     sprite->sprite_data = gs_sprite;
-    sprite->z_index = 0;
+    //sprite->z_index = 0;
+    //sprite->active = 1;
 
 }
 

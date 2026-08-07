@@ -134,12 +134,13 @@ void clear_display() {
 
 void draw() {
     currentBuffer = GsGetActiveBuff();
-
     if(get_sprite_list() != NULL){
         for(int i = 0; i < get_sprite_list()->length; i++){
             Sprite* sprite = array_list_get(get_sprite_list(), i);
+            //printf("\nDOIT ETRE A 0 : %d\n", sprite->active);
+            if(sprite->active > 0)
+                GsSortSprite(sprite->sprite_data, &orderingTables[currentBuffer], 0);
             //printf("Drawing sprite : %s\n", sprite->sprite_name);
-            GsSortSprite(sprite->sprite_data, &orderingTables[currentBuffer], 0);
         }
     }
 

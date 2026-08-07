@@ -37,7 +37,10 @@ void update()
     game_update();
 
     //render.c
+    render_update();
+    /*
     clear_display();
     draw();
     display();
+    */
 }
