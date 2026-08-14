@@ -10,6 +10,8 @@
 			<!-- <file name="EXEMPLE.TIM"	type="data"	source="../DATA/EXEMPLE.TIM"/> -->
 			<file name="DNG_BG.TIM"	type="data"	source="../DATA/DNG_BG.TIM"/>
 			<file name="WALL_0-4.TIM"	type="data"	source="../DATA/WALL_0-4.TIM"/>
+			<file name="WALL_1-5.TIM"	type="data"	source="../DATA/WALL_1-5.TIM"/>
+			<file name="WALL_2-2.TIM"	type="data"	source="../DATA/WALL_2-2.TIM"/>
 			<dummy sectors="2000"/>
 		</directory_tree>
 	</track>

@@ -190,16 +190,44 @@ void load_dungeon_sprites(){
     walls[0] = sprite_register("WALL_0-4.TIM");
     walls[1] = sprite_register("WALL_0-4.TIM");
 
+    walls[2] = sprite_register("WALL_1-5.TIM");
+    walls[3] = sprite_register("WALL_1-5.TIM");
+    walls[4] = sprite_register("WALL_1-5.TIM");
+
+    walls[5] = sprite_register("WALL_2-2.TIM");
+
+
     //printf("Adress of BG : %p\n", bg);
     sprite_list_load();
     //((Sprite*) array_list_get(get_sprite_list(),0))->active = 1;
     bg->active = 1;
     bg->z_index = 255;
-    walls[0]->z_index = 10;
-    walls[1]->z_index = 10;
+
+    walls[0]->z_index = 5;
+    walls[1]->z_index = 5;
+
+    walls[2]->z_index = 10;
+    walls[3]->z_index = 10;
+    walls[4]->z_index = 10;
+
+    walls[5]->z_index = 15;
 
     sprite_flip_horizontal(walls[1], 1);
-    sprite_set_position(walls[1], bg->sprite_data->w - walls[1]->sprite_data->w, 0);
+    sprite_set_position(walls[1], bg->sprite_data->w - walls[1]->sprite_data->w, 0); //TODO : add getters for sprite width and height
+
+    sprite_set_position(walls[2], -26, 28);
+    sprite_set_position(walls[3], 45, 28);
+    sprite_set_position(walls[4], 116, 28);
+
+    sprite_set_position(walls[5], 0, 37);
+
+
+    walls[0]->active = 0;
+    walls[1]->active = 0;
+
+    walls[2]->active = 0;
+    walls[3]->active = 0;
+    walls[4]->active = 0;
 
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
