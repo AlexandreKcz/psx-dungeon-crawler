@@ -22,6 +22,7 @@ Sprite* sprite_register(unsigned char* sprite_name){
     sprite->sprite_name[31] = '\0';
     sprite->sprite_data = NULL;
     sprite->z_index = 0;
+    sprite->flip = 0;
     sprite->active = 1;
 
     array_list_append(sprites_list, &sprite);

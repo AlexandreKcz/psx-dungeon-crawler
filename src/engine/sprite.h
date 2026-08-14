@@ -9,8 +9,9 @@
 typedef struct sprite {
     char sprite_name[32];
     GsSPRITE* sprite_data;
-    unsigned short z_index;
+    unsigned short z_index; //WITH OT_LENGTH 9, 2^9 = 512 so 511 is the background
     unsigned short active;
+    unsigned short flip;
 } Sprite;
 
 void sprites_list_init(unsigned short max_length, unsigned short chunk_size);

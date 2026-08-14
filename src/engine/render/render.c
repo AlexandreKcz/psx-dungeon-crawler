@@ -138,8 +138,10 @@ void draw() {
         for(int i = 0; i < get_sprite_list()->length; i++){
             Sprite* sprite = *(Sprite**) array_list_get(get_sprite_list(), i);
             //printf("\nDOIT ETRE A 0 : %d\n", sprite->active);
-            if(sprite->active > 0)
-                GsSortSprite(sprite->sprite_data, &orderingTables[currentBuffer], 0);
+            if(sprite->active > 0){
+                //TODO : Handle Flip
+                GsSortSprite(sprite->sprite_data, &orderingTables[currentBuffer], sprite->z_index);
+            }
             //printf("Drawing sprite : %s\n", sprite->sprite_name);
         }
     }
