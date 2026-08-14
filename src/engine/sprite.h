@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./types/array_list.h"
+#include "./types.h"
 
 #include <libgs.h>
 
@@ -21,3 +22,5 @@ Array_List* get_sprite_list();
 
 void sprite_flip_horizontal(Sprite* sprite, unsigned short flip);
 void sprite_flip_vertical(Sprite* sprite, unsigned short flip);
+void sprite_set_position_vector(Sprite* sprite, vector2 position);
+void sprite_set_position(Sprite* sprite, int x, int y);

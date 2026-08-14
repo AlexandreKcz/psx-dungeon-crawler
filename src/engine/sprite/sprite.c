@@ -138,3 +138,12 @@ void sprite_flip_vertical(Sprite* sprite, unsigned short flip){
         sprite->sprite_data->my = 0;
     }
 }
+
+void sprite_set_position_vector(Sprite* sprite, vector2 position){
+    sprite->sprite_data->x = position.vx;
+    sprite->sprite_data->y = position.vy;
+}
+void sprite_set_position(Sprite* sprite, int x, int y){
+    vector2 pos = { .vx = x, .vy = y };
+    sprite_set_position_vector(sprite, pos);
+}

@@ -8,8 +8,8 @@
 			<file name="MAIN.EXE"	type="data"	source="../MAIN.EXE"/>
 			<!-- Add your own files or folders here -->
 			<!-- <file name="EXEMPLE.TIM"	type="data"	source="../DATA/EXEMPLE.TIM"/> -->
-			<file name="BG_SPRT.TIM"	type="data"	source="../DATA/BG_SPRT.TIM"/>
-			<file name="WALL_FL.TIM"	type="data"	source="../DATA/WALL_FL.TIM"/>
+			<file name="DNG_BG.TIM"	type="data"	source="../DATA/DNG_BG.TIM"/>
+			<file name="WALL_0-4.TIM"	type="data"	source="../DATA/WALL_0-4.TIM"/>
 			<dummy sectors="2000"/>
 		</directory_tree>
 	</track>

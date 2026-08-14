@@ -15,7 +15,7 @@ Box* box[25];
 vector2 offset = { .vx = 50, .vy = 50 };
 
 Sprite* bg;
-Sprite* walls[1];
+Sprite* walls[20];
 
 short dungeon[5][5][4] = {
     { {0,0,1,0}, {0,0,1,0}, {1,1,1,1}, {0,0,0,0},{0,0,1,0} },
@@ -186,8 +186,9 @@ void player_input(){
 }
 
 void load_dungeon_sprites(){
-    bg = sprite_register("BG_SPRT.TIM");
-    walls[0] = sprite_register("WALL_FL.TIM");
+    bg = sprite_register("DNG_BG.TIM");
+    walls[0] = sprite_register("WALL_0-4.TIM");
+    walls[1] = sprite_register("WALL_0-4.TIM");
 
     //printf("Adress of BG : %p\n", bg);
     sprite_list_load();
@@ -195,6 +196,11 @@ void load_dungeon_sprites(){
     bg->active = 1;
     bg->z_index = 255;
     walls[0]->z_index = 10;
+    walls[1]->z_index = 10;
+
+    sprite_flip_horizontal(walls[1], 1);
+    sprite_set_position(walls[1], bg->sprite_data->w - walls[1]->sprite_data->w, 0);
+
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
     printf(" Background : %d\n", bg->active);
