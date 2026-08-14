@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <libgs.h>
 
 Array_List* sprites_list = NULL;
 
@@ -22,7 +23,6 @@ Sprite* sprite_register(unsigned char* sprite_name){
     sprite->sprite_name[31] = '\0';
     sprite->sprite_data = NULL;
     sprite->z_index = 0;
-    sprite->flip = 0;
     sprite->active = 1;
 
     array_list_append(sprites_list, &sprite);
@@ -114,4 +114,27 @@ void sprite_create(unsigned long* image_data, Sprite* sprite){
 
 Array_List* get_sprite_list(){
     return sprites_list;
+}
+
+/*
+    flip : 0 = no flip, 1 = flip
+*/
+void sprite_flip_horizontal(Sprite* sprite, unsigned short flip){
+    if(flip > 0){
+        sprite->sprite_data->scalex = -ONE;
+        sprite->sprite_data->mx = sprite->sprite_data->w;
+    } else {
+        sprite->sprite_data->scalex = ONE;
+        sprite->sprite_data->mx = 0;
+    }
+}
+
+void sprite_flip_vertical(Sprite* sprite, unsigned short flip){
+    if(flip > 0){
+        sprite->sprite_data->scaley = -ONE;
+        sprite->sprite_data->my = sprite->sprite_data->h;
+    } else {
+        sprite->sprite_data->scaley = ONE;
+        sprite->sprite_data->my = 0;
+    }
 }
