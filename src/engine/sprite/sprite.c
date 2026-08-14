@@ -8,7 +8,7 @@
 Array_List* sprites_list = NULL;
 
 void sprite_list_init(unsigned short max_length, unsigned short chunk_size){
-    sprites_list = array_list_create(max_length, chunk_size, sizeof(Sprite));
+    sprites_list = array_list_create(max_length, chunk_size, sizeof(Sprite*));
 }
 
 Sprite* sprite_register(unsigned char* sprite_name){
@@ -24,14 +24,15 @@ Sprite* sprite_register(unsigned char* sprite_name){
     sprite->z_index = 0;
     sprite->active = 1;
 
-    array_list_append(sprites_list, sprite);
+    array_list_append(sprites_list, &sprite);
 
     /*
     printf("Address of sprite : %p\n", sprite);
     printf("Adress of array sprite : %p\n", (Sprite*) array_list_get(sprites_list, sprites_list->length-1));
     */
 
-    return (Sprite*) array_list_get(sprites_list, sprites_list->length-1);
+    //return (Sprite*) array_list_get(sprites_list, sprites_list->length-1);
+    return sprite;
 }
 
 void sprite_list_load(){
@@ -41,7 +42,7 @@ void sprite_list_load(){
     for(int i = 0; i < sprites_list->length; i++){
         unsigned long* file_buffer = NULL;
 
-        Sprite* sprite = (Sprite*) array_list_get(sprites_list, i);
+        Sprite* sprite = *(Sprite**) array_list_get(sprites_list, i);
 
         cd_read_file(sprite->sprite_name, &file_buffer);
 
