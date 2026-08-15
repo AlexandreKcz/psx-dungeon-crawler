@@ -195,6 +195,15 @@ void load_dungeon_sprites(){
     walls[4] = sprite_register("WALL_1-5.TIM");
 
     walls[5] = sprite_register("WALL_2-2.TIM");
+    walls[6] = sprite_register("WALL_2-4.TIM");
+    walls[7] = sprite_register("WALL_2-4.TIM");
+    walls[8] = sprite_register("WALL_2-2.TIM");
+
+    walls[9] = sprite_register("WALL_3-5.TIM");
+    walls[10] = sprite_register("WALL_3-5.TIM");
+    walls[11] = sprite_register("WALL_3-5.TIM");
+    walls[12] = sprite_register("WALL_3-5.TIM");
+    walls[13] = sprite_register("WALL_3-5.TIM");
 
 
     //printf("Adress of BG : %p\n", bg);
@@ -211,6 +220,15 @@ void load_dungeon_sprites(){
     walls[4]->z_index = 10;
 
     walls[5]->z_index = 15;
+    walls[6]->z_index = 15;
+    walls[7]->z_index = 15;
+    walls[8]->z_index = 15;
+
+    walls[9]->z_index = 20;
+    walls[10]->z_index = 20;
+    walls[11]->z_index = 20;
+    walls[12]->z_index = 20;
+    walls[13]->z_index = 20;
 
     sprite_flip_horizontal(walls[1], 1);
     sprite_set_position(walls[1], bg->sprite_data->w - walls[1]->sprite_data->w, 0); //TODO : add getters for sprite width and height
@@ -220,6 +238,18 @@ void load_dungeon_sprites(){
     sprite_set_position(walls[4], 116, 28);
 
     sprite_set_position(walls[5], 0, 37);
+    sprite_set_position(walls[6], 45, 28);
+
+    sprite_flip_horizontal(walls[7], 1);
+    sprite_set_position(walls[7], 97, 28);
+    sprite_flip_horizontal(walls[8], 1);
+    sprite_set_position(walls[8], 128, 37);
+
+    sprite_set_position(walls[9], -5, 46);
+    sprite_set_position(walls[10], 28, 46);
+    sprite_set_position(walls[11], 62, 46);
+    sprite_set_position(walls[12], 97, 46);
+    sprite_set_position(walls[13], 132, 46);
 
 
     walls[0]->active = 0;
@@ -229,7 +259,16 @@ void load_dungeon_sprites(){
     walls[3]->active = 0;
     walls[4]->active = 0;
 
-    walls[5]->active = 1;
+    walls[5]->active = 0;
+    walls[6]->active = 0;
+    walls[7]->active = 0;
+    walls[8]->active = 0;
+
+    walls[9]->active = 1;
+    walls[10]->active = 1;
+    walls[11]->active = 1;
+    walls[12]->active = 1;
+    walls[13]->active = 1;
 
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
