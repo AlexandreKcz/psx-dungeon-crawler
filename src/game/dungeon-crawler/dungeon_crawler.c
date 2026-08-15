@@ -229,6 +229,8 @@ void load_dungeon_sprites(){
     walls[3]->active = 0;
     walls[4]->active = 0;
 
+    walls[5]->active = 1;
+
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
     printf(" Background : %d\n", bg->active);
