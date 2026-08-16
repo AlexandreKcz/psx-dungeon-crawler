@@ -14,6 +14,9 @@
 			<file name="WALL_2-2.TIM"	type="data"	source="../DATA/WALL_2-2.TIM"/>
 			<file name="WALL_2-4.TIM"	type="data"	source="../DATA/WALL_2-4.TIM"/>
 			<file name="WALL_3-5.TIM"	type="data"	source="../DATA/WALL_3-5.TIM"/>
+			<file name="WALL_4-0.TIM"	type="data"	source="../DATA/WALL_4-0.TIM"/>
+			<file name="WALL_4-2.TIM"	type="data"	source="../DATA/WALL_4-2.TIM"/>
+			<file name="WALL_4-4.TIM"	type="data"	source="../DATA/WALL_4-4.TIM"/>
 			<dummy sectors="2000"/>
 		</directory_tree>
 	</track>
