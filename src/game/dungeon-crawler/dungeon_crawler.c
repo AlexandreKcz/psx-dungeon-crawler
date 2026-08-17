@@ -25,6 +25,8 @@ short dungeon[5][5][4] = {
     { {1,0,0,0}, {1,1,1,1}, {1,0,0,0}, {1,0,0,0},{1,0,0,0} },
 };
 
+short player_lookat_matrix[3][7][4];
+
 unsigned short wall_sprite_matrix[20][6] = {
      {2,0,1,3,0,3},
      {3,0,1,4,0,3},
@@ -101,7 +103,6 @@ void draw_player(){
             end_x = halfCell.vx / 2;
             break;
         case 2: //south
-            printf("SOUTH");
             end_y = halfCell.vy / 2;
             end_x = 0;
             break;
@@ -119,30 +120,34 @@ void draw_player(){
     line_move(line_start, line_end, player->visual);
 }
 
-vector2 player_direction_vector(){
+vector2 get_direction_vector(int dir){
 
-    vector2 dir = { .vx = 0, .vy = 0 };
-
-    switch (player->direction){
+    vector2 dir_vec = { .vx = 0, .vy = 0 };
+    
+    switch (dir){
         case 0: //north
-            dir.vy = -1;
-            dir.vx = 0;
+            dir_vec.vy = -1;
+            dir_vec.vx = 0;
             break;
         case 1: //east
-            dir.vy = 0;
-            dir.vx = 1;
+            dir_vec.vy = 0;
+            dir_vec.vx = 1;
             break;
         case 2: //south
-            dir.vy = 1;
-            dir.vx = 0;
+            dir_vec.vy = 1;
+            dir_vec.vx = 0;
             break;
         case 3: //west
-            dir.vy = 0;
-            dir.vx = -1;
+            dir_vec.vy = 0;
+            dir_vec.vx = -1;
             break;
     }
 
-    return dir;
+    return dir_vec;
+}
+
+vector2 player_direction_vector(){
+    return  get_direction_vector(player->direction);
 }
 
 //1 if collision else 
@@ -172,12 +177,97 @@ short player_check_collision(){
     return 0;
 }
 
+void set_player_lookat_matrix(short matrix[3][7][4]){
+
+    /* Elegant mais inutilement complique en fin de compte
+    vector2 matrix_half_dim = { .vx = 3, .vy = 2 };
+    vector2 player_forward_vector = player_direction_vector();
+
+    vector2 player_left_vector = get_direction_vector((player->direction - 1) % 4);
+    vector2 scaled_left_vector = vector_multiply(&player_left_vector, &matrix_half_dim);
+    vector2 start_coord = vector_add(&player->position, &scaled_left_vector);
+
+    vector2 scaled_right_vector = vector_uniform_scale(&scaled_left_vector, -1);
+    vector2 scaled_forward_vector = vector_multiply(&player_forward_vector, &matrix_half_dim);
+    vector2 cumulated_vector = vector_add(&scaled_right_vector, &scaled_forward_vector);
+    vector2 end_coord = vector_add(&player->position, &cumulated_vector);
+    */
+
+    static short surrounding_matrix[7][7][4];
+    vector2 dungeon_dim = { .vx = (sizeof(dungeon[0]) / sizeof(dungeon[0][0])), .vy = (sizeof(dungeon) / sizeof(dungeon[0])) };
+    int mat_y = 0, mat_x = 0;
+
+    for(int y = player->position.vy - 3; y <= player->position.vy + 3; y++){
+        mat_x = 0;
+        for(int x = player->position.vx - 3; x <= player->position.vx + 3; x++){
+            for(int w = 0; w < 4; w++){
+                if(x < 0 || y < 0 || x >= dungeon_dim.vx || y >= dungeon_dim.vy)
+                    surrounding_matrix[mat_y][mat_x][w] = 0;
+                else
+                    surrounding_matrix[mat_y][mat_x][w] = dungeon[y][x][w];
+            }
+
+            mat_x++;
+        }
+        mat_y++;
+    }
+
+    for (int d = 0; d < player->direction; d++){
+        rotate_matrix(7, surrounding_matrix);
+    }
+
+    for(int y = 0; y < 7; y++){
+        for(int x = 0; x < 7; x++){
+            rotate_array(surrounding_matrix[y][x], 4, player->direction);
+        }
+    }
+
+    for(int y = 1; y < 4; y++){
+        for(int x = 0; x < 7; x++){
+            for(int w = 0; w < 4; w++)
+                matrix[y-1][x][w] = surrounding_matrix[y][x][w];
+        }
+    }
+};
+
+void display_matrix(short matrix[3][7][4]){
+    for(int y = 0; y < 3; y++){
+        for(int x = 0; x < 7; x++){
+            for(int w = 0; w < 4; w++)
+            {
+                if(matrix[y][x][w] > 0) printf(".");
+                else printf(" ");
+            }
+                //printf("%u",matrix[y][x][w]);
+            printf("|");
+        }
+        printf("\n");
+    }
+
+    printf("\n");
+
+    for(int wall_index = 0; wall_index < 20; wall_index++)
+    {
+        if(
+            player_lookat_matrix[wall_sprite_matrix[wall_index][1]][wall_sprite_matrix[wall_index][0]][wall_sprite_matrix[wall_index][2]] > 0 ||
+            player_lookat_matrix[wall_sprite_matrix[wall_index][4]][wall_sprite_matrix[wall_index][3]][wall_sprite_matrix[wall_index][5]] > 0
+        )
+            walls[wall_index]->active = 1;
+        else
+            walls[wall_index]->active = 0;
+    }
+}
+
 void player_input(){
+    int input_pressed = 0;
+
     if(pad_check_pressed(pad1Right)){
         if(player->direction == 3)
             player->direction = 0;
         else
             player->direction++;
+
+        input_pressed = 1;
     }
 
     if(pad_check_pressed(pad1Left)){
@@ -185,6 +275,8 @@ void player_input(){
             player->direction = 3;
         else
             player->direction--;
+
+        input_pressed = 1;
     }
 
     if(pad_check_pressed(pad1Up)){
@@ -205,6 +297,13 @@ void player_input(){
                 player->position.vx--;
                 break;
         }
+
+        input_pressed = 1;
+    }
+
+    if(input_pressed > 0){
+        set_player_lookat_matrix(player_lookat_matrix);
+        display_matrix(player_lookat_matrix);
     }
 }
 
@@ -327,4 +426,35 @@ void load_dungeon_sprites(){
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
     printf(" Background : %d\n", bg->active);
+}
+
+//https://www.geeksforgeeks.org/dsa/inplace-rotate-square-matrix-by-90-degrees/
+void rotate_matrix(short n, short matrix[7][7][4]){
+    static int result[7][7][4];
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++){
+            for(int k = 0; k < 4; k++)
+                result[n - j - 1][i][k] = matrix[i][j][k];
+        }
+    }
+
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            for(int k = 0; k < 4; k++)
+                matrix[i][j][k] = result[i][j][k];
+        }
+    }
+}
+
+//https://www.geeksforgeeks.org/dsa/c-program-cyclically-rotate-array-one/
+//https://www.geeksforgeeks.org/dsa/array-rotation/
+void rotate_array(short array[], int n, int d){
+    for(int i = 0; i < d; i++){
+        int first = array[0];
+        for(int j = 0; j < n - 1; j++){
+            array[j] = array[j+1];
+        }
+        array[n - 1] = first;
+    }
 }

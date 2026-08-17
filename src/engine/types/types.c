@@ -24,3 +24,21 @@ vector2 vector_add(vector2* vec1, vector2* vec2){
 
 	return  addition;
 }
+
+vector2 vector_multiply(vector2* vec1, vector2* vec2){
+	vector2 multiplied = {
+		.vx = vec1->vx * vec2->vx,
+		.vy = vec1->vy * vec2->vy
+	};
+
+	return  multiplied;
+}
+
+vector2 vector_uniform_scale(vector2 *vec, int scale){
+	vector2 scaled = {
+		.vx = vec->vx * scale,
+		.vy = vec->vy * scale
+	};
+
+	return scaled;
+}
