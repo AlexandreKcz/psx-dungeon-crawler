@@ -67,6 +67,11 @@ void draw_dungeon(){
 
     for (int y = 0; y < 5; y++){
         for(int x = 0; x < 5; x++){
+            vector2 pos = { .vx = offset.vx + x * size, .vy = offset.vy + y * size };
+            vector2 dim = { .vx = size, .vy = size };
+
+            box_create_mask(pos, dim, *white, dungeon[y][x], &box[y + x]);
+            /*
             for(int w = 0; w < 4; w++){
 
                 vector2 pos = { .vx = offset.vx + x * size, .vy = offset.vy + y * size };
@@ -74,6 +79,7 @@ void draw_dungeon(){
 
                 box_create_mask(pos, dim, *white, dungeon[y][x], &box[y + x]);
             }
+            */
         }
     }
 }
@@ -222,15 +228,44 @@ void set_player_lookat_matrix(short matrix[3][7][4]){
         }
     }
 
+    for(int look_y = 0; look_y < 3; look_y++){
+        int src_y = 3 - look_y;
+        for(int x = 0; x < 7; x++){
+            for(int w = 0; w < 4; w++){
+                matrix[look_y][x][w] = surrounding_matrix[src_y][x][w];
+            }
+        }
+    }
+
+    for(int y = 0; y < 7; y++){
+        for(int x = 0; x < 7; x++){
+            for(int w = 0; w < 4; w++)
+            {
+                if(surrounding_matrix[y][x][w] > 0) printf(".");
+                else printf(" ");
+            }
+                //printf("%u",matrix[y][x][w]);
+            printf("|");
+        }
+        printf("\n");
+    }
+    
+    printf("\n");
+
+
+    /*
     for(int y = 1; y < 4; y++){
         for(int x = 0; x < 7; x++){
             for(int w = 0; w < 4; w++)
                 matrix[y-1][x][w] = surrounding_matrix[y][x][w];
         }
     }
+    */
 };
 
 void display_matrix(short matrix[3][7][4]){
+
+    /*
     for(int y = 0; y < 3; y++){
         for(int x = 0; x < 7; x++){
             for(int w = 0; w < 4; w++)
@@ -245,6 +280,7 @@ void display_matrix(short matrix[3][7][4]){
     }
 
     printf("\n");
+    */
 
     for(int wall_index = 0; wall_index < 20; wall_index++)
     {
@@ -416,12 +452,12 @@ void load_dungeon_sprites(){
     walls[12]->active = 0;
     walls[13]->active = 0;
 
-    walls[14]->active = 1;
-    walls[15]->active = 1;
-    walls[16]->active = 1;
-    walls[17]->active = 1;
-    walls[18]->active = 1;
-    walls[19]->active = 1;
+    walls[14]->active = 0;
+    walls[15]->active = 0;
+    walls[16]->active = 0;
+    walls[17]->active = 0;
+    walls[18]->active = 0;
+    walls[19]->active = 0;
 
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
@@ -432,10 +468,42 @@ void load_dungeon_sprites(){
 void rotate_matrix(short n, short matrix[7][7][4]){
     static int result[7][7][4];
 
+    /*
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++){
             for(int k = 0; k < 4; k++)
                 result[n - j - 1][i][k] = matrix[i][j][k];
+        }
+    }
+
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            for(int k = 0; k < 4; k++)
+                matrix[i][j][k] = result[i][j][k];
+        }
+    }
+    */
+
+    /*
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++){
+            for(int k = 0; k < 4; k++)
+                result[j][n - 1 - i][k] = matrix[i][j][k];
+        }
+    }
+
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            for(int k = 0; k < 4; k++)
+                matrix[i][j][k] = result[i][j][k];
+        }
+    }
+    */
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++){
+            for(int k = 0; k < 4; k++)
+                result[n - 1 - j][i][k] = matrix[i][j][k];
         }
     }
 
@@ -453,7 +521,7 @@ void rotate_array(short array[], int n, int d){
     for(int i = 0; i < d; i++){
         int first = array[0];
         for(int j = 0; j < n - 1; j++){
-            array[j] = array[j+1];
+            array[j] = array[j + 1];
         }
         array[n - 1] = first;
     }
