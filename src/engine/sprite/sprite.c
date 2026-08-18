@@ -24,6 +24,8 @@ Sprite* sprite_register(unsigned char* sprite_name){
     sprite->sprite_data = NULL;
     sprite->z_index = 0;
     sprite->active = 1;
+    
+    sprite->childs_list = array_list_create(20, 2, sizeof(Sprite*));
 
     array_list_append(sprites_list, &sprite);
 
@@ -116,6 +118,23 @@ Array_List* get_sprite_list(){
     return sprites_list;
 }
 
+void sprite_set_active(Sprite* sprite, unsigned short active){
+    sprite->active = active;
+}
+
+void sprite_set_z_index(Sprite* sprite, unsigned short z_index){
+    sprite->z_index = z_index;
+}
+
+
+vector2 sprite_get_scale(Sprite* sprite){
+    vector2 scale = {
+        .vx = sprite->sprite_data->scalex,
+        .vy = sprite->sprite_data->scaley
+    };
+
+    return scale;
+}
 /*
     flip : 0 = no flip, 1 = flip
 */
@@ -139,11 +158,62 @@ void sprite_flip_vertical(Sprite* sprite, unsigned short flip){
     }
 }
 
+
+vector2 sprite_get_position_vector(Sprite* sprite){
+    vector2 pos = { .vx = sprite->sprite_data->x, .vy = sprite->sprite_data->y};
+    return pos;
+}
+
 void sprite_set_position_vector(Sprite* sprite, vector2 position){
     sprite->sprite_data->x = position.vx;
     sprite->sprite_data->y = position.vy;
+
+    if(sprite->childs_list->length > 0){
+        for(int c = 0; c < sprite->childs_list->length; c++){
+            Sprite* child = *(Sprite**) array_list_get(sprite->childs_list, c);
+            printf("\n Position : %p \n", &child->parent_link->local_position);
+            vector2 new_pos = vector_add(&position, &child->parent_link->local_position);
+            sprite_set_position_vector(child, new_pos);
+        }
+    }
 }
+
 void sprite_set_position(Sprite* sprite, int x, int y){
     vector2 pos = { .vx = x, .vy = y };
     sprite_set_position_vector(sprite, pos);
+}
+
+void sprite_set_x(Sprite *sprite, int x){
+    sprite_set_position(sprite, x, sprite->sprite_data->y);
+}
+
+void sprite_set_y(Sprite *sprite, int y){
+    sprite_set_position(sprite, sprite->sprite_data->x, y);
+}
+
+vector2 sprite_move_vector(Sprite *sprite, vector2 move){
+    vector2 sprite_position = sprite_get_position_vector(sprite);
+    vector2 calculated_motion = vector_add(
+        &sprite_position,
+        &move
+    );
+    sprite_set_position_vector(sprite, calculated_motion);
+    return calculated_motion;
+}
+
+void sprite_link(Sprite* parent, Sprite* child){
+    vector2 child_position = sprite_get_position_vector(child);
+    vector2 parent_position = sprite_get_position_vector(parent);
+
+    vector2 local_position = vector_substract(&child_position, &parent_position);
+    vector2 local_scale = sprite_get_scale(child);
+
+    SpriteLink* link = (SpriteLink*) malloc3(sizeof(SpriteLink)); 
+
+    link->parent = parent;
+    link->local_position = local_position;
+    link->local_scale = local_scale;
+
+    child->parent_link = link;
+    array_list_append(parent->childs_list, &child);
 }

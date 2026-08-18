@@ -25,6 +25,15 @@ vector2 vector_add(vector2* vec1, vector2* vec2){
 	return  addition;
 }
 
+vector2 vector_substract(vector2 *vec1, vector2 *vec2){
+	vector2 substraction = {
+		.vx = vec1->vx - vec2->vx,
+		.vy = vec1->vy - vec2->vy
+	};
+
+	return substraction;
+}
+
 vector2 vector_multiply(vector2* vec1, vector2* vec2){
 	vector2 multiplied = {
 		.vx = vec1->vx * vec2->vx,

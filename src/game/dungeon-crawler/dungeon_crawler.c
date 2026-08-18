@@ -288,9 +288,9 @@ void display_matrix(short matrix[3][7][4]){
             player_lookat_matrix[wall_sprite_matrix[wall_index][1]][wall_sprite_matrix[wall_index][0]][wall_sprite_matrix[wall_index][2]] > 0 ||
             player_lookat_matrix[wall_sprite_matrix[wall_index][4]][wall_sprite_matrix[wall_index][3]][wall_sprite_matrix[wall_index][5]] > 0
         )
-            walls[wall_index]->active = 1;
+            sprite_set_active(walls[wall_index], 1);
         else
-            walls[wall_index]->active = 0;
+            sprite_set_active(walls[wall_index], 0);
     }
 }
 
@@ -341,6 +341,9 @@ void player_input(){
         set_player_lookat_matrix(player_lookat_matrix);
         display_matrix(player_lookat_matrix);
     }
+
+    vector2 movement = {.vx = 1, .vy = 0};
+    sprite_move_vector(bg, movement);
 }
 
 void load_dungeon_sprites(){
@@ -434,6 +437,14 @@ void load_dungeon_sprites(){
     sprite_flip_horizontal(walls[19], 1);
     sprite_set_position(walls[19], 136, 47);
 
+    for(int w = 0; w < 20; w++){
+        //printf("\nSetting active\n");
+        sprite_set_active(walls[w], 0);
+        //printf("\nSetting parent\n");
+        sprite_link(bg, walls[w]);
+    };
+
+    /*
     walls[0]->active = 0;
     walls[1]->active = 0;
 
@@ -458,6 +469,15 @@ void load_dungeon_sprites(){
     walls[17]->active = 0;
     walls[18]->active = 0;
     walls[19]->active = 0;
+    */
+
+    //sprite_link(bg, walls[0]);
+
+    /*
+    for(int w = 0; w < 20; w++){
+        sprite_link(bg, walls[w]);
+    };
+    */
 
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
