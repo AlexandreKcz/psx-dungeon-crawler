@@ -135,6 +135,22 @@ vector2 sprite_get_scale(Sprite* sprite){
 
     return scale;
 }
+
+void sprite_set_scale_vector(Sprite* sprite, vector2 scale){
+    sprite->sprite_data->scalex = scale.vx;
+    sprite->sprite_data->scaley = scale.vy;
+
+    if(sprite->childs_list->length > 0){
+        for(int c = 0; c < sprite->childs_list->length; c++){
+            Sprite* child = *(Sprite**) array_list_get(sprite->childs_list, c);
+            //vector2 new_pos = vector_add(&position, &child->parent_link->local_position);
+
+            vector2 new_scale = _vector_cross_multiply(&VECTOR_ONE, &child->parent_link->local_scale, &scale);
+            sprite_set_scale_vector(child, new_scale);
+        }
+    }
+}
+
 /*
     flip : 0 = no flip, 1 = flip
 */
@@ -171,7 +187,6 @@ void sprite_set_position_vector(Sprite* sprite, vector2 position){
     if(sprite->childs_list->length > 0){
         for(int c = 0; c < sprite->childs_list->length; c++){
             Sprite* child = *(Sprite**) array_list_get(sprite->childs_list, c);
-            printf("\n Position : %p \n", &child->parent_link->local_position);
             vector2 new_pos = vector_add(&position, &child->parent_link->local_position);
             sprite_set_position_vector(child, new_pos);
         }
@@ -206,14 +221,38 @@ void sprite_link(Sprite* parent, Sprite* child){
     vector2 parent_position = sprite_get_position_vector(parent);
 
     vector2 local_position = vector_substract(&child_position, &parent_position);
-    vector2 local_scale = sprite_get_scale(child);
+
+    vector2 parent_scale = sprite_get_scale(parent);
+    vector2 child_scale = sprite_get_scale(child);
+
 
     SpriteLink* link = (SpriteLink*) malloc3(sizeof(SpriteLink)); 
 
     link->parent = parent;
     link->local_position = local_position;
-    link->local_scale = local_scale;
+    //printf("\n SCALE : %d, %d\n", parent_scale.vx, parent_scale.vy);
+    //printf("\n SCALE : %d, %d\n", child_scale.vx, child_scale.vy);
+    link->local_scale = _vector_cross_multiply(&parent_scale, &child_scale, &VECTOR_ONE);
+    //printf("Child Scale : %i, %i", link->local_scale.vx, link->local_scale.vy);
 
     child->parent_link = link;
     array_list_append(parent->childs_list, &child);
+}
+
+//s1 = parent, s2 = child, m = ONE
+vector2 _vector_cross_multiply(vector2* s1, vector2* s2, vector2* m){
+
+    vector2_int s1_convert = vector_convert_to_int(s1);
+    vector2_int s2_convert = vector_convert_to_int(s2);
+    vector2_int m_convert = vector_convert_to_int(m);
+
+    //CANNOT use short vector multiplication
+    vector2_int s2_m_product = vector_int_multiply(&s2_convert, &m_convert);
+    //printf("\n product : %d, %d\n", s2_m_product.vx, s2_m_product.vy);
+
+    vector2_int s1_division = vector_int_divide(&s2_m_product, &s1_convert);
+
+    vector2 result = vector_convert_from_int(&s1_division);
+
+    return result;
 }

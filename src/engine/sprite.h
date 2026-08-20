@@ -34,6 +34,9 @@ void sprite_set_active(Sprite* sprite, unsigned short active);
 void sprite_set_z_index(Sprite* sprite, unsigned short z_index);
 
 vector2 sprite_get_scale(Sprite* sprite);
+void sprite_set_scale_vector(Sprite* sprite, vector2 scale);
+
+
 void sprite_flip_horizontal(Sprite* sprite, unsigned short flip);
 void sprite_flip_vertical(Sprite* sprite, unsigned short flip);
 
@@ -49,3 +52,5 @@ vector2 sprite_move_x(Sprite* sprite, int x);
 vector2 sprite_move_y(Sprite* sprite, int y);
 
 void sprite_link(Sprite* parent, Sprite* child);
+
+vector2 _vector_cross_multiply(vector2* s1, vector2* s2, vector2* m);

@@ -294,6 +294,8 @@ void display_matrix(short matrix[3][7][4]){
     }
 }
 
+vector2 scale = VECTOR_ONE;
+
 void player_input(){
     int input_pressed = 0;
 
@@ -342,8 +344,11 @@ void player_input(){
         display_matrix(player_lookat_matrix);
     }
 
-    vector2 movement = {.vx = 1, .vy = 0};
-    sprite_move_vector(bg, movement);
+    //vector2 movement = {.vx = 1, .vy = 0};
+    scale.vx++;
+    scale.vy++;
+    sprite_set_scale_vector(bg, scale);
+    //sprite_move_vector(bg, movement);
 }
 
 void load_dungeon_sprites(){
