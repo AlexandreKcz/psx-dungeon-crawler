@@ -139,6 +139,7 @@ vector2 sprite_get_scale(Sprite* sprite){
 void sprite_set_scale_vector(Sprite* sprite, vector2 scale){
     sprite->sprite_data->scalex = scale.vx;
     sprite->sprite_data->scaley = scale.vy;
+    //sprite_scale_pivot(sprite, scale);
 
     if(sprite->childs_list->length > 0){
         for(int c = 0; c < sprite->childs_list->length; c++){
@@ -147,7 +148,29 @@ void sprite_set_scale_vector(Sprite* sprite, vector2 scale){
 
             vector2 new_scale = _vector_cross_multiply(&VECTOR_ONE, &child->parent_link->local_scale, &scale);
             sprite_set_scale_vector(child, new_scale);
+
+            vector2 parent_pos = sprite_get_position_vector(sprite);
+            //sprite_scale_pivot(child, new_scale);
+            vector2 scaled_pos = _vector_cross_multiply(&VECTOR_ONE, &child->parent_link->local_position, &scale);
+
+
+            vector2 new_pos = vector_add(&scaled_pos, &parent_pos);
+            sprite_set_position_vector(child, new_pos);
         }
+    }
+}
+
+void sprite_scale_pivot(Sprite* sprite, vector2 new_scale){
+    if(sprite->sprite_data->mx > 0){
+        int scaled_mx = (int) (sprite->sprite_data->w) * (int) (new_scale.vx);
+        scaled_mx = scaled_mx / (int) (-ONE);
+        sprite->sprite_data->mx = scaled_mx;
+    }
+    
+    if(sprite->sprite_data->my > 0){
+        int scaled_my = (int) (sprite->sprite_data->h) * (int) (new_scale.vy);
+        scaled_my = scaled_my / (int) (-ONE);
+        sprite->sprite_data->my = scaled_my;
     }
 }
 
@@ -157,20 +180,24 @@ void sprite_set_scale_vector(Sprite* sprite, vector2 scale){
 void sprite_flip_horizontal(Sprite* sprite, unsigned short flip){
     if(flip > 0){
         sprite->sprite_data->scalex = -ONE;
-        sprite->sprite_data->mx = sprite->sprite_data->w;
+        //sprite->sprite_data->mx = sprite->sprite_data->w;
+        sprite->sprite_data->x -= (short) (((int) sprite->sprite_data->w * (int) sprite->sprite_data->scalex) / (int) ONE);
+        //sprite->sprite_data->x -= sprite->sprite_data->w;
     } else {
         sprite->sprite_data->scalex = ONE;
-        sprite->sprite_data->mx = 0;
+        //sprite->sprite_data->mx = 0;
     }
 }
 
 void sprite_flip_vertical(Sprite* sprite, unsigned short flip){
     if(flip > 0){
         sprite->sprite_data->scaley = -ONE;
-        sprite->sprite_data->my = sprite->sprite_data->h;
+        //sprite->sprite_data->my = sprite->sprite_data->h;
+        sprite->sprite_data->y += (short) (((int) sprite->sprite_data->h * (int) sprite->sprite_data->scaley) / (int) ONE);
+        //sprite->sprite_data->y += sprite->sprite_data->h;
     } else {
         sprite->sprite_data->scaley = ONE;
-        sprite->sprite_data->my = 0;
+        //sprite->sprite_data->my = 0;
     }
 }
 
@@ -187,7 +214,11 @@ void sprite_set_position_vector(Sprite* sprite, vector2 position){
     if(sprite->childs_list->length > 0){
         for(int c = 0; c < sprite->childs_list->length; c++){
             Sprite* child = *(Sprite**) array_list_get(sprite->childs_list, c);
-            vector2 new_pos = vector_add(&position, &child->parent_link->local_position);
+
+            vector2 parent_scale = sprite_get_scale(sprite);
+            vector2 scaled_local_pos = _vector_cross_multiply(&VECTOR_ONE, &child->parent_link->local_position, &parent_scale);
+            vector2 new_pos = vector_add(&position, &scaled_local_pos);
+
             sprite_set_position_vector(child, new_pos);
         }
     }
@@ -229,7 +260,7 @@ void sprite_link(Sprite* parent, Sprite* child){
     SpriteLink* link = (SpriteLink*) malloc3(sizeof(SpriteLink)); 
 
     link->parent = parent;
-    link->local_position = local_position;
+    link->local_position = _vector_cross_multiply(&parent_scale, &local_position, &VECTOR_ONE);
     //printf("\n SCALE : %d, %d\n", parent_scale.vx, parent_scale.vy);
     //printf("\n SCALE : %d, %d\n", child_scale.vx, child_scale.vy);
     link->local_scale = _vector_cross_multiply(&parent_scale, &child_scale, &VECTOR_ONE);

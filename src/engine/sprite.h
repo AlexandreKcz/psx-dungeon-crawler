@@ -35,6 +35,7 @@ void sprite_set_z_index(Sprite* sprite, unsigned short z_index);
 
 vector2 sprite_get_scale(Sprite* sprite);
 void sprite_set_scale_vector(Sprite* sprite, vector2 scale);
+void sprite_scale_pivot(Sprite* sprite, vector2 new_scale);
 
 
 void sprite_flip_horizontal(Sprite* sprite, unsigned short flip);

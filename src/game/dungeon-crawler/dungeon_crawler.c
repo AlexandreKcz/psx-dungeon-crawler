@@ -18,11 +18,11 @@ Sprite* bg;
 Sprite* walls[20];
 
 short dungeon[5][5][4] = {
-    { {0,0,1,0}, {0,0,1,0}, {1,1,1,1}, {0,0,0,0},{0,0,1,0} },
+    { {0,0,1,0}, {0,0,0,0}, {1,1,1,1}, {0,0,0,0},{0,0,1,0} },
     { {0,0,0,1}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},{0,1,0,0} },
-    { {0,0,0,1}, {0,0,0,1}, {0,0,0,0}, {0,0,0,0},{0,1,0,0} },
+    { {0,0,0,1}, {0,0,0,1}, {0,0,0,0}, {1,1,1,1},{0,1,0,0} },
     { {0,0,0,1}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0},{0,1,0,0} },
-    { {1,0,0,0}, {1,1,1,1}, {1,0,0,0}, {1,0,0,0},{1,0,0,0} },
+    { {1,0,0,0}, {0,1,1,1}, {1,0,0,0}, {1,0,0,0},{1,0,0,0} },
 };
 
 short player_lookat_matrix[3][7][4];
@@ -345,10 +345,40 @@ void player_input(){
     }
 
     //vector2 movement = {.vx = 1, .vy = 0};
-    scale.vx++;
-    scale.vy++;
-    sprite_set_scale_vector(bg, scale);
+    //scale.vx++;
+    //scale.vy++;
+    //sprite_set_scale_vector(bg, scale);
     //sprite_move_vector(bg, movement);
+
+    /*
+    if(pad_check(pad1Up)){
+        scale.vx += 4;
+        scale.vy += 4;
+        sprite_set_scale_vector(bg, scale);
+
+        //printf("\n New Local : %d, %d", walls[7]->sprite_data->x, walls[7]->sprite_data->y);
+    }
+
+    if(pad_check(pad1Down)){
+        scale.vx -= 4;
+        scale.vy -= 4;
+        sprite_set_scale_vector(bg, scale);
+       //printf("\n New Local : %d, %d", walls[7]->sprite_data->x, walls[7]->sprite_data->y);
+    }
+
+    if(pad_check(pad1Left)){
+        vector2 move = {.vx = -1, .vy = 0};
+        sprite_move_vector(bg, move);
+    }
+
+    if(pad_check(pad1Right)){
+        vector2 move = {.vx = 1, .vy = 0};
+        sprite_move_vector(bg, move);
+    }
+    */
+
+    //FntPrint("\nScale : %d,%d", scale.vx, scale.vy);
+    //FntPrint("\nPosition : %d,%d\n", bg->sprite_data->x, bg->sprite_data->y);
 }
 
 void load_dungeon_sprites(){
@@ -411,8 +441,9 @@ void load_dungeon_sprites(){
     walls[18]->z_index = 25;
     walls[19]->z_index = 25;
 
-    sprite_flip_horizontal(walls[1], 1);
+    //pos : 28, 0 scale : -ONE, ONE
     sprite_set_position(walls[1], bg->sprite_data->w - walls[1]->sprite_data->w, 0); //TODO : add getters for sprite width and height
+    sprite_flip_horizontal(walls[1], 1);
 
     sprite_set_position(walls[2], -26, 28);
     sprite_set_position(walls[3], 45, 28);
@@ -421,10 +452,10 @@ void load_dungeon_sprites(){
     sprite_set_position(walls[5], 0, 37);
     sprite_set_position(walls[6], 45, 28);
 
-    sprite_flip_horizontal(walls[7], 1);
     sprite_set_position(walls[7], 97, 28);
-    sprite_flip_horizontal(walls[8], 1);
+    sprite_flip_horizontal(walls[7], 1);
     sprite_set_position(walls[8], 128, 37);
+    sprite_flip_horizontal(walls[8], 1);
 
     sprite_set_position(walls[9], -5, 46);
     sprite_set_position(walls[10], 28, 46);
@@ -435,19 +466,31 @@ void load_dungeon_sprites(){
     sprite_set_position(walls[14], 0, 47);
     sprite_set_position(walls[15], 28, 46);
     sprite_set_position(walls[16], 63, 47);
-    sprite_flip_horizontal(walls[17], 1);
     sprite_set_position(walls[17], 90, 47);
-    sprite_flip_horizontal(walls[18], 1);
+    sprite_flip_horizontal(walls[17], 1);
     sprite_set_position(walls[18], 113, 47);
-    sprite_flip_horizontal(walls[19], 1);
+    sprite_flip_horizontal(walls[18], 1);
     sprite_set_position(walls[19], 136, 47);
+    sprite_flip_horizontal(walls[19], 1);
 
     for(int w = 0; w < 20; w++){
         //printf("\nSetting active\n");
         sprite_set_active(walls[w], 0);
         //printf("\nSetting parent\n");
         sprite_link(bg, walls[w]);
+
+        if(w == 7)
+            printf("\n Local : %d, %d", walls[w]->parent_link->local_scale.vx, walls[w]->parent_link->local_scale.vy);
     };
+
+
+    vector2 scale = {.vx = 7625, .vy = 7625};
+    vector2 pos = { .vx = 10, .vy = 0 };
+    sprite_set_scale_vector(bg, scale);
+    sprite_set_position_vector(bg, pos);
+
+    set_player_lookat_matrix(player_lookat_matrix);
+    display_matrix(player_lookat_matrix);
 
     /*
     walls[0]->active = 0;
@@ -486,7 +529,7 @@ void load_dungeon_sprites(){
 
     //sprite_flip_vertical(bg, 1);
     //sprite_flip_horizontal(walls[0], 1);
-    printf(" Background : %d\n", bg->active);
+    //printf(" Background : %d\n", bg->active);
 }
 
 //https://www.geeksforgeeks.org/dsa/inplace-rotate-square-matrix-by-90-degrees/
