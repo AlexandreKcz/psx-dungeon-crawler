@@ -20,6 +20,6 @@ void box_create(vector2 pos, vector2 dim, Color color, Box** box);
 void box_init(vector2 pos, vector2 dim, Color color, Box* box);
 void box_create_mask(vector2 pos, vector2 dim, Color color, short mask[], Box** box);
 void box_init_mask(vector2 pos, vector2 dim, Color color, short mask[], Box* box);
-void box_move(vector2 newPos, Box* box);
+void box_set_position(vector2 newPos, Box* box);
 void box_draw(Box* box);
 void box_free(Box* box);
