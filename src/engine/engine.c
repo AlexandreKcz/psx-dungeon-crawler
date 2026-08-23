@@ -17,7 +17,7 @@ void initialize(){
     initialize_debug_font();
 
     //controller.c
-    pad_initialize();
+    _pad_initialize();
     //load cd data
 
     printf("End of game initialization \n");
@@ -32,7 +32,7 @@ void start(){
 
 void update()
 {
-    pad_update();
+    _pad_update();
 
     game_update();
 

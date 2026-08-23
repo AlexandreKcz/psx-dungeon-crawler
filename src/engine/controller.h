@@ -1,13 +1,17 @@
 #pragma once
 
+/// Most of the code here comes from MBDesign's work : <https://mbdesigns.itch.io/ps1-homebrew-source-code-rendering-3d-graphics-with-psyq>
+
 #include <libetc.h>
 #include <libapi.h>
 
-extern int	SysPad;
-extern int  SysPadT;
+extern int	_sys_pad;
+extern int  _sys_pad_trigger;
 
-#define	pad_check(_p_)          (SysPad & (_p_))
-#define	pad_check_pressed(_p_)	(SysPadT & (_p_))
+/// check if button is held
+#define	pad_check(_p_)          (_sys_pad & (_p_))
+/// check if button is pressed
+#define	pad_check_pressed(_p_)	(_sys_pad_trigger & (_p_))
 
 #define pad1Up			_PAD(0, PADLup)
 #define pad1Down		_PAD(0, PADLdown)
@@ -38,6 +42,6 @@ extern int  SysPadT;
 #define pad2Start		_PAD(1, PADstart)
 #define pad2Select		_PAD(1, PADselect)
 
-void pad_initialize();
+void _pad_initialize();
 void pad_reset();
-void pad_update();
+void _pad_update();
