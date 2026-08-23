@@ -1,6 +1,6 @@
 #include "dungeon_crawler.h"
 
-#include "../../engine/prims/prims.h"
+#include "../../engine/prims.h"
 #include "../../engine/controller.h"
 #include "../../engine/sprite.h"
 #include <stdlib.h>

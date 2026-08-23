@@ -2,8 +2,11 @@
 
 #include <libgpu.h>
 
-#include "../types.h"
+#include "types.h"
 
+/**
+ * @brief structure that represent a box prims with 4 lines to draw
+ */
 typedef struct {
     Line* lines[4];
     vector2 dimensions;

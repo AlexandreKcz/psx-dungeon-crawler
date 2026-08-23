@@ -1,4 +1,4 @@
-#include "prims.h"
+#include "../prims.h"
 
 #include <stdio.h>
 #include <stdlib.h>

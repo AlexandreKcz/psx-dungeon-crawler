@@ -6,7 +6,7 @@
 #include <libgs.h>
 #include <libgpu.h>
 
-#include "../prims/prims.h"
+#include "../prims.h"
 #include "../types/array_list.h"
 #include "../sprite.h"
 

@@ -5,7 +5,7 @@
 #include <stddef.h>
 
 #include "../engine/types.h"
-#include "../engine/prims/prims.h"
+#include "../engine/prims.h"
 #include "../engine/render/render_internal.h"
 
 int cnt = 0;
