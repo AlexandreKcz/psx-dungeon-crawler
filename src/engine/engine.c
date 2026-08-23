@@ -17,7 +17,7 @@ void _engine_initialize(){
     _initialize_memory_heap();
 
     //render.c
-    initialize_screen();
+    _initialize_screen();
     initialize_debug_font();
 
     //controller.c
@@ -47,5 +47,5 @@ void _engine_update()
 
     game_update();
 
-    render_update();
+    _render_update();
 }

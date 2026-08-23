@@ -1,5 +1,7 @@
 #pragma once
 
+/// define internal constants for rendering
+
 #define SCREEN_MODE_PAL 0
 #define SCREEN_MODE_NTSC 1
 
