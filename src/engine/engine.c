@@ -12,7 +12,7 @@
  * @brief handle engine initialization : init memory heap, init screen and font, init pad
  * 
  */
-void _initialize(){
+void _engine_initialize(){
     //system.c
     _initialize_memory_heap();
 
@@ -30,7 +30,7 @@ void _initialize(){
  * @brief wrapper to call game_start from engine and display game version
  * 
  */
-void _start(){
+void _engine_start(){
 
     game_start();
 
@@ -41,7 +41,7 @@ void _start(){
  * @brief handle engine update : update pad, call game_update and update render
  * 
  */
-void _update()
+void _engine_update()
 {
     _pad_update();
 

@@ -8,13 +8,13 @@
 ///     - Font Init
 ///     - Input Pad Init
 ///     - Load CD Data
-void _initialize();
+void _engine_initialize();
 
 /// Main Game Start, contains just Game Start and version display
-void _start();
+void _engine_start();
 
 /// Main Engine loop, contains : 
 ///     - Pad Update
 ///     - Game Update
 ///     - Render Update
-void _update();
+void _engine_update();
