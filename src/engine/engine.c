@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "system/system.h"
+#include "system.h"
 #include "render.h"
 #include "constants.h"
 #include "controller.h"
@@ -14,7 +14,7 @@
  */
 void _initialize(){
     //system.c
-    initialize_memory_heap();
+    _initialize_memory_heap();
 
     //render.c
     initialize_screen();
