@@ -5,10 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../types/array_list.h"
-
+/// @brief boolean to check if Psy-Q's CD system has been initialized
 int ds_init = 0;
 
+/**
+ * @brief Initialize CD System (if it has not been already initialized), wrapper for Psy-Q's DsInit function
+ * 
+ */
 void cd_open(){
     if(ds_init == 0){
         ds_init = 1;
@@ -16,6 +19,10 @@ void cd_open(){
     }
 }
 
+/**
+ * @brief Clode CD System (if it is opened), wrapper for Psy-Q's DsClose function
+ * 
+ */
 void cd_close(){
     if(ds_init == 1){
         ds_init = 0;
@@ -23,10 +30,21 @@ void cd_close(){
     }
 }
 
+/**
+ * @brief getter function for ds_init
+ * 
+ * @return short : boolean to check if Psy-Q's CD system has been initialized
+ */
 short cd_is_open(){
     return ds_init;
 }
 
+/**
+ * @brief read file on the disk
+ * 
+ * @param file_path path of file on the disk file system
+ * @param file double pointer to the file that will hold the data of the file read on disk
+ */
 void cd_read_file(unsigned char* file_path, unsigned long** file){
 
     DslFILE temp_file_info;
