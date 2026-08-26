@@ -11,6 +11,7 @@
 #include "../sprite.h"
 
 /// a lot of code here come's from Wituz's Ps1 Development tutorial : <https://github.com/Wituz/wituz-youtube/blob/master/ps1-game-tutorial/PART%209%20-%20CD%20Loading/project/constants.h>
+/// the fps counter is based on this code by sk-io : <https://github.com/sk-io/psx-engine/blob/main/src/main.c#L37>
 
 /// @brief screen dimension
 int screen_width, screen_height;
