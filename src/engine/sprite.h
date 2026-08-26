@@ -53,5 +53,3 @@ vector2 sprite_move_x(Sprite* sprite, int x);
 vector2 sprite_move_y(Sprite* sprite, int y);
 
 void sprite_link(Sprite* parent, Sprite* child);
-
-vector2 _vector_cross_multiply(vector2* s1, vector2* s2, vector2* m);

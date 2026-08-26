@@ -33,3 +33,5 @@ vector2_int vector_int_substract(vector2_int* vec1, vector2_int* vec2);
 vector2_int vector_int_multiply(vector2_int* vec1, vector2_int* vec2);
 vector2_int vector_int_divide(vector2_int* vec1, vector2_int* vec2);
 vector2_int vector_int_uniform_scale(vector2_int* vec, int scale);
+
+vector2 vector_cross_multiply(vector2* s1, vector2* s2, vector2* m);
