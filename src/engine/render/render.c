@@ -12,8 +12,19 @@
 
 /// a lot of code here come's from Wituz's Ps1 Development tutorial : <https://github.com/Wituz/wituz-youtube/blob/master/ps1-game-tutorial/PART%209%20-%20CD%20Loading/project/constants.h>
 
-/// screen dimension
+/// @brief screen dimension
 int screen_width, screen_height;
+/// @brief current video mode (see SCREEN_MODE_NTSC and SCREEN_MODE_PAL in render_internal.h)
+int current_video_mode;
+
+/// @brief current fps
+volatile int fps = 0;
+/// @brief frame counter
+volatile int fps_counter = 0;
+/// @brief end of display frame counter
+volatile int last_fps = 0;
+/// @brief v sync time in ms
+int vsync_time = 0;
 
 /// @brief main ordering tables
 GsOT        ordering_tables[2];
@@ -75,8 +86,12 @@ void set_screen_mode(int mode) {
     printf("Screen resolution : %d x %d \n", screen_width, screen_height);
     printf("Playstation video mode : %d \n", GetVideoMode());
 
+    current_video_mode = GetVideoMode();
+
     GsInitGraph(screen_width, screen_height, GsINTER|GsOFSGPU, 1, 0);
     GsDefDispBuff(0, 0, 0, screen_height);
+
+    VSyncCallback(_vsync_callback_fps);
 }
 
 
@@ -186,9 +201,44 @@ void _draw() {
 void _display() {
     current_buffer = GsGetActiveBuff();
     DrawSync(0);
-    VSync(0);
+    vsync_time = VSync(0);
     GsSwapDispBuff();
     GsSortClear(background_color->r, background_color->g, background_color->b, &ordering_tables[current_buffer]);
     GsDrawOt(&ordering_tables[current_buffer]);
     FntFlush(-1);
+
+    last_fps++;
+}
+
+/**
+ * @brief fps counter tied to v sync callback based on this code by sk-io <https://github.com/sk-io/psx-engine/blob/main/src/main.c#L37>
+ * 
+ */
+void _vsync_callback_fps(){
+    fps_counter++;
+    int max_fps = 60;
+
+    if (fps_counter >= max_fps){
+        fps = last_fps;
+        last_fps = 0;
+        fps_counter = 0;
+    }
+}
+
+/**
+ * @brief get number of v-sync in ms
+ * 
+ * @return int : vsync
+ */
+int get_vsync_time(){
+    return vsync_time;
+}
+
+/**
+ * @brief get current frame per second
+ * 
+ * @return int : current fps
+ */
+int get_fps(){
+    return fps;
 }

@@ -15,3 +15,8 @@ void _render_update();
 void clear_display();
 void _draw();
 void _display();
+
+void _vsync_callback_fps();
+
+int get_vsync_time();
+int get_fps();
