@@ -4,8 +4,26 @@
 
 #include "./array_list.h"
 
+///this code is heavily based on this array list implementation in C made by Dylan Falconer <https://github.com/Falconerd/engine-from-scratch/blob/rec/src/engine/array_list/array_list.c>
+
+/*
+    [TODO]
+    - get element by value
+    - contains method
+    - swap elements
+*/
+
+//// boolean to enable debug logs for array lists
 short log_array = 0;
 
+/**
+ * @brief create an array list, allocate and initialize it
+ * 
+ * @param max_length the maximum number of element allowed in the array to prevent overflow
+ * @param chunk_size the size of an array's chunk : dynamic array are allocated by chunks in memory, when a chunk is full the array dynamically allocate another chunk
+ * @param item_size the size of the type of element the array will contain : array list can only contain one type of element
+ * @return Array_List* : pointer to the array list to initialize
+ */
 Array_List* array_list_create(unsigned short max_length, unsigned short chunk_size, unsigned long item_size){
     Array_List* list = malloc3(sizeof(Array_List));
 
@@ -30,9 +48,16 @@ Array_List* array_list_create(unsigned short max_length, unsigned short chunk_si
         return NULL;
     }
 
-    return  list;
+    return  list; //TODO : maybe do this with a double pointer in params instead for consistency in code ?
 }
 
+/**
+ * @brief append an item to an initialised array list
+ * 
+ * @param list pointer to the list that will receive the item
+ * @param item item to append to the array
+ * @return unsigned short : index of the added item in the array
+ */
 unsigned short array_list_append(Array_List* list, void* item){
     if(log_array > 0) printf("Appending to array list\n");
     if(!list || !list->items){
@@ -67,6 +92,13 @@ unsigned short array_list_append(Array_List* list, void* item){
     return index;
 }
 
+/**
+ * @brief quickly remove an item out of the array and replace it with the last element of the array to free memory without reallocating
+ * 
+ * @param list pointer to the list that will have the element removed
+ * @param index index of the element to remove
+ * @return unsigned short : 1 if the element has been removed, 0 if it failed
+ */
 unsigned short array_list_fast_remove(Array_List* list, unsigned short index){
     if(list->length == 0){
         printf("List is empty\n");
@@ -94,6 +126,13 @@ unsigned short array_list_fast_remove(Array_List* list, unsigned short index){
     return 1;
 }
 
+/**
+ * @brief remove an item out of the array while keeping element's order, this is longer than quick remove because it uses memory reallocation, but it keeps element in order
+ * 
+ * @param list pointer to the list that will have the element removed
+ * @param index index of the element to remove
+ * @return unsigned short : 1 if the element has been removed, 0 if it failed
+ */
 unsigned short array_list_order_remove(Array_List* list, unsigned short index){
         if(list->length == 0){
         printf("List is empty\n");
@@ -123,6 +162,13 @@ unsigned short array_list_order_remove(Array_List* list, unsigned short index){
     return 1;
 }
 
+/**
+ * @brief get an element inside an array
+ * 
+ * @param list pointer to the list that will query the element
+ * @param index index of the element to query
+ * @return void* void pointer to the element queried, require casting to the correct type of the element
+ */
 void* array_list_get(Array_List* list, unsigned short index){
     if (index >= list->length){
         printf("Index out of bounds\n");
@@ -132,6 +178,11 @@ void* array_list_get(Array_List* list, unsigned short index){
     return (unsigned char*) list->items + index * list->item_size;
 }
 
+/**
+ * @brief free an array list in memory
+ * 
+ * @param list pointer to the array list to free
+ */
 void array_list_free(Array_List* list){
     if(list){
         if(list->items)
