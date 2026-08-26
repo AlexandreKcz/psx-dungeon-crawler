@@ -6,12 +6,25 @@
 #include <string.h>
 #include <libgs.h>
 
+/// @brief : array list of all sprites to render
 Array_List* sprites_list = NULL;
 
+/**
+ * @brief initialize and allocate the sprite array list
+ * 
+ * @param max_length max number of sprite to render
+ * @param chunk_size chunk size of the sprite array list (keep this high if you plan to add a lot of sprite)
+ */
 void sprite_list_init(unsigned short max_length, unsigned short chunk_size){
     sprites_list = array_list_create(max_length, chunk_size, sizeof(Sprite*));
 }
 
+/**
+ * @brief initialize and allocate a new sprite in the array list, but his texture is'nt loaded yet
+ * 
+ * @param sprite_name name of the texture that the sprite will load when calling sprite_list_load
+ * @return Sprite* pointer to the registered sprite
+ */
 Sprite* sprite_register(unsigned char* sprite_name){
     if(!sprites_list){
         printf("WARNING : sprites_list has not been initialized, initializing with default values : max_length = 500, chunk_size = 5\n");
@@ -38,6 +51,10 @@ Sprite* sprite_register(unsigned char* sprite_name){
     return sprite;
 }
 
+/**
+ * @brief load all sprite's texture registered in list with sprite_register, this is meant to open and close the cd system once
+ * 
+ */
 void sprite_list_load(){
 
     cd_open();
@@ -61,6 +78,12 @@ void sprite_list_load(){
     cd_close();
 }
 
+/**
+ * @brief create all the texture data of the sprite (this is an init for Psy-Q's GsSprite contained inside my Sprite struct wrapper)
+ * 
+ * @param image_data image data of the sprite
+ * @param sprite pointer to the sprite that will hold the image data
+ */
 void sprite_create(unsigned long* image_data, Sprite* sprite){
     GsIMAGE tim_data;
     RECT rect, crect;
@@ -114,19 +137,41 @@ void sprite_create(unsigned long* image_data, Sprite* sprite){
 
 }
 
+/**
+ * @brief get the sprite array list
+ * 
+ * @return Array_List* : sprite_list
+ */
 Array_List* get_sprite_list(){
     return sprites_list;
 }
 
+/**
+ * @brief set sprite active or inactive, if active <= 0 the sprite won't be drawn
+ * 
+ * @param sprite pointer to the sprite to set active
+ * @param active new value for active sprite's member
+ */
 void sprite_set_active(Sprite* sprite, unsigned short active){
     sprite->active = active;
 }
 
+/**
+ * @brief set sprite z_index : 0 is front, the highest back value is calculated using OT_LENGTH (see sprite.h)
+ * 
+ * @param sprite pointer to the sprite to update
+ * @param z_index new value for sprite's z_index
+ */
 void sprite_set_z_index(Sprite* sprite, unsigned short z_index){
     sprite->z_index = z_index;
 }
 
-
+/**
+ * @brief get the sprite's scale
+ * 
+ * @param sprite pointer to the sprite
+ * @return vector2 : sprite's scale
+ */
 vector2 sprite_get_scale(Sprite* sprite){
     vector2 scale = {
         .vx = sprite->sprite_data->scalex,
@@ -136,6 +181,12 @@ vector2 sprite_get_scale(Sprite* sprite){
     return scale;
 }
 
+/**
+ * @brief set the sprite's scale
+ * 
+ * @param sprite pointer to the sprite
+ * @param scale new scale
+ */
 void sprite_set_scale_vector(Sprite* sprite, vector2 scale){
     sprite->sprite_data->scalex = scale.vx;
     sprite->sprite_data->scaley = scale.vy;
@@ -174,9 +225,12 @@ void sprite_scale_pivot(Sprite* sprite, vector2 new_scale){
     }
 }
 
-/*
-    flip : 0 = no flip, 1 = flip
-*/
+/**
+ * @brief [DEPRECATED] flip the sprite horizontally, 0 = no flip, 1 = flip
+ * 
+ * @param sprite pointer to the sprite
+ * @param flip flip value
+ */
 void sprite_flip_horizontal(Sprite* sprite, unsigned short flip){
     if(flip > 0){
         sprite->sprite_data->scalex = -ONE;
@@ -189,6 +243,12 @@ void sprite_flip_horizontal(Sprite* sprite, unsigned short flip){
     }
 }
 
+/**
+ * @brief [DEPRECATED] flip the sprite vertically, 0 = no flip, 1 = flip
+ * 
+ * @param sprite pointer to the sprite
+ * @param flip flip value
+ */
 void sprite_flip_vertical(Sprite* sprite, unsigned short flip){
     if(flip > 0){
         sprite->sprite_data->scaley = -ONE;
@@ -201,12 +261,23 @@ void sprite_flip_vertical(Sprite* sprite, unsigned short flip){
     }
 }
 
-
+/**
+ * @brief get the sprite's position
+ * 
+ * @param sprite pointer to the sprite
+ * @return vector2 : sprite's position
+ */
 vector2 sprite_get_position_vector(Sprite* sprite){
     vector2 pos = { .vx = sprite->sprite_data->x, .vy = sprite->sprite_data->y};
     return pos;
 }
 
+/**
+ * @brief set the sprite's position
+ * 
+ * @param sprite pointer to the sprite
+ * @param position new position
+ */
 void sprite_set_position_vector(Sprite* sprite, vector2 position){
     sprite->sprite_data->x = position.vx;
     sprite->sprite_data->y = position.vy;
@@ -224,19 +295,45 @@ void sprite_set_position_vector(Sprite* sprite, vector2 position){
     }
 }
 
+/**
+ * @brief set the sprite's position using x and y instead of a vector2
+ * 
+ * @param sprite pointer to the sprite
+ * @param x new x value
+ * @param y new y value
+ */
 void sprite_set_position(Sprite* sprite, int x, int y){
     vector2 pos = { .vx = x, .vy = y };
     sprite_set_position_vector(sprite, pos);
 }
 
+/**
+ * @brief set the sprite's x value
+ * 
+ * @param sprite pointer to the sprite
+ * @param x new x value
+ */
 void sprite_set_x(Sprite *sprite, int x){
     sprite_set_position(sprite, x, sprite->sprite_data->y);
 }
 
+/**
+ * @brief set the sprite's y value
+ * 
+ * @param sprite pointer to the sprite
+ * @param y new y value
+ */
 void sprite_set_y(Sprite *sprite, int y){
     sprite_set_position(sprite, sprite->sprite_data->x, y);
 }
 
+/**
+ * @brief 
+ * 
+ * @param sprite 
+ * @param move 
+ * @return vector2 
+ */
 vector2 sprite_move_vector(Sprite *sprite, vector2 move){
     vector2 sprite_position = sprite_get_position_vector(sprite);
     vector2 calculated_motion = vector_add(
@@ -247,6 +344,12 @@ vector2 sprite_move_vector(Sprite *sprite, vector2 move){
     return calculated_motion;
 }
 
+/**
+ * @brief create a parent link between two sprites : the child will follow the position and scale of his parent, rotation is WIP
+ * 
+ * @param parent parent sprite
+ * @param child child sprite
+ */
 void sprite_link(Sprite* parent, Sprite* child){
     vector2 child_position = sprite_get_position_vector(child);
     vector2 parent_position = sprite_get_position_vector(parent);
@@ -261,10 +364,7 @@ void sprite_link(Sprite* parent, Sprite* child){
 
     link->parent = parent;
     link->local_position = vector_cross_multiply(&parent_scale, &local_position, (vector2*) &VECTOR_ONE);
-    //printf("\n SCALE : %d, %d\n", parent_scale.vx, parent_scale.vy);
-    //printf("\n SCALE : %d, %d\n", child_scale.vx, child_scale.vy);
     link->local_scale = vector_cross_multiply(&parent_scale, &child_scale, (vector2*) &VECTOR_ONE);
-    //printf("Child Scale : %i, %i", link->local_scale.vx, link->local_scale.vy);
 
     child->parent_link = link;
     array_list_append(parent->childs_list, &child);
