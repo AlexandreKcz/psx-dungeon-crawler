@@ -37,7 +37,7 @@ void color_free(Color *color){
  * @param vec2 second vector
  * @return vector2 : sum of the two vectors
  */
-vector2 vector_add(vector2* vec1, vector2* vec2){
+vector2 vector2_add(vector2* vec1, vector2* vec2){
 	vector2 addition = {
 		.vx = vec1->vx + vec2->vx,
 		.vy = vec1->vy + vec2->vy
@@ -53,7 +53,7 @@ vector2 vector_add(vector2* vec1, vector2* vec2){
  * @param vec2 second vector
  * @return vector2 : difference of the two vectors
  */
-vector2 vector_substract(vector2 *vec1, vector2 *vec2){
+vector2 vector2_substract(vector2 *vec1, vector2 *vec2){
 	vector2 substraction = {
 		.vx = vec1->vx - vec2->vx,
 		.vy = vec1->vy - vec2->vy
@@ -69,7 +69,7 @@ vector2 vector_substract(vector2 *vec1, vector2 *vec2){
  * @param vec2 second vector
  * @return vector2 : product of the two vectors
  */
-vector2 vector_multiply(vector2* vec1, vector2* vec2){
+vector2 vector2_multiply(vector2* vec1, vector2* vec2){
 	vector2 multiplied = {
 		.vx = vec1->vx * vec2->vx,
 		.vy = vec1->vy * vec2->vy
@@ -85,7 +85,7 @@ vector2 vector_multiply(vector2* vec1, vector2* vec2){
  * @param vec2 second vector
  * @return vector2 : quotient of the two vectors (rounded as int)
  */
-vector2 vector_divide(vector2* vec1, vector2* vec2){
+vector2 vector2_divide(vector2* vec1, vector2* vec2){
 	vector2 divided = {
 		.vx = vec1->vx / vec2->vx,
 		.vy = vec1->vy / vec2->vy
@@ -101,7 +101,7 @@ vector2 vector_divide(vector2* vec1, vector2* vec2){
  * @param scale scaling factor
  * @return vector2 : scaled vector
  */
-vector2 vector_uniform_scale(vector2 *vec, int scale){
+vector2 vector2_uniform_scale(vector2 *vec, int scale){
 	vector2 scaled = {
 		.vx = vec->vx * scale,
 		.vy = vec->vy * scale
@@ -116,7 +116,7 @@ vector2 vector_uniform_scale(vector2 *vec, int scale){
  * @param vec short vector to convert
  * @return vector2_int : converted vector
  */
-vector2_int vector_convert_to_int(vector2* vec){
+vector2_int vector2_convert_to_vector2_int(vector2* vec){
 	vector2_int convert = {
 		.vx = (int) vec->vx,
 		.vy = (int) vec->vy
@@ -131,7 +131,7 @@ vector2_int vector_convert_to_int(vector2* vec){
  * @param vec int vector to convert
  * @return vector2 : converted vector
  */
-vector2 vector_convert_from_int(vector2_int* vec){
+vector2 vector2_int_convert_to_vector2(vector2_int* vec){
 	//TODO : add a warning if size exceeded
 	
 	vector2 convert = {
@@ -149,7 +149,7 @@ vector2 vector_convert_from_int(vector2_int* vec){
  * @param vec2 second vector
  * @return vector2_int : sum of the two vectors
  */
-vector2_int vector_int_add(vector2_int* vec1, vector2_int* vec2){
+vector2_int vector2_int_add(vector2_int* vec1, vector2_int* vec2){
 	vector2_int addition = {
 		.vx = vec1->vx + vec2->vx,
 		.vy = vec1->vy + vec2->vy
@@ -165,7 +165,7 @@ vector2_int vector_int_add(vector2_int* vec1, vector2_int* vec2){
  * @param vec2 second vector
  * @return vector2_int : difference of the two vectors
  */
-vector2_int vector_int_substract(vector2_int* vec1, vector2_int* vec2){
+vector2_int vector2_int_substract(vector2_int* vec1, vector2_int* vec2){
 	vector2_int substraction = {
 		.vx = vec1->vx - vec2->vx,
 		.vy = vec1->vy - vec2->vy
@@ -181,7 +181,7 @@ vector2_int vector_int_substract(vector2_int* vec1, vector2_int* vec2){
  * @param vec2 second vector
  * @return vector2_int : product of the two vectors
  */
-vector2_int vector_int_multiply(vector2_int* vec1, vector2_int* vec2){
+vector2_int vector2_int_multiply(vector2_int* vec1, vector2_int* vec2){
 	vector2_int multiplied = {
 		.vx = vec1->vx * vec2->vx,
 		.vy = vec1->vy * vec2->vy
@@ -197,7 +197,7 @@ vector2_int vector_int_multiply(vector2_int* vec1, vector2_int* vec2){
  * @param vec2 second vector
  * @return vector2_int : quotient of the two vectors (rounded)
  */
-vector2_int vector_int_divide(vector2_int* vec1, vector2_int* vec2){
+vector2_int vector2_int_divide(vector2_int* vec1, vector2_int* vec2){
 	vector2_int divided = {
 		.vx = vec1->vx / vec2->vx,
 		.vy = vec1->vy / vec2->vy
@@ -213,7 +213,7 @@ vector2_int vector_int_divide(vector2_int* vec1, vector2_int* vec2){
  * @param scale scaling factor
  * @return vector2_int : scaled vector
  */
-vector2_int vector_int_uniform_scale(vector2_int* vec, int scale){
+vector2_int vector2_int_uniform_scale(vector2_int* vec, int scale){
 	vector2_int scaled = {
 		.vx = vec->vx * scale,
 		.vy = vec->vy * scale
@@ -231,21 +231,41 @@ vector2_int vector_int_uniform_scale(vector2_int* vec, int scale){
  * @param m bottom left vector of the cross multiplication
  * @return vector2 : bottom right vector of the cross multiplication
  */
-vector2 vector_cross_multiply(vector2* s1, vector2* s2, vector2* m){
+vector2 vector2_cross_multiply(vector2* s1, vector2* s2, vector2* m){
 
 	//TODO : rename parameter to mahtematically suited name (like a,b,c)
 
-    vector2_int s1_convert = vector_convert_to_int(s1);
-    vector2_int s2_convert = vector_convert_to_int(s2);
-    vector2_int m_convert = vector_convert_to_int(m);
+    vector2_int s1_convert = vector2_convert_to_vector2_int(s1);
+    vector2_int s2_convert = vector2_convert_to_vector2_int(s2);
+    vector2_int m_convert = vector2_convert_to_vector2_int(m);
 
     //CANNOT use short vector multiplication
-    vector2_int s2_m_product = vector_int_multiply(&s2_convert, &m_convert);
+    vector2_int s2_m_product = vector2_int_multiply(&s2_convert, &m_convert);
     //printf("\n product : %d, %d\n", s2_m_product.vx, s2_m_product.vy);
 
-    vector2_int s1_division = vector_int_divide(&s2_m_product, &s1_convert);
+    vector2_int s1_division = vector2_int_divide(&s2_m_product, &s1_convert);
 
-    vector2 result = vector_convert_from_int(&s1_division);
+    vector2 result = vector2_int_convert_to_vector2(&s1_division);
 
     return result;
+}
+
+vector3 vector3_short_convert_to_vector3(vector3_short* vec){
+	vector3 convert = {
+		.vx = vec->vx,
+		.vy = vec->vy,
+		.vz = vec->vz
+	};
+	
+	return convert;
+}
+
+vector3_short vector3_convert_to_vector3_short(vector3_short *vec){
+	vector3_short convert = {
+		.vx = vec->vx,
+		.vy = vec->vy,
+		.vz = vec->vz
+	};
+
+	return convert;
 }

@@ -1,5 +1,7 @@
 #include "../light.h"
 
+/// Mostly based on MBDesign-s work here : <https://mbdesigns.itch.io/ps1-homebrew-source-code-rendering-3d-graphics-with-psyq>
+
 #include <libgs.h>
 
 GsF_LIGHT sun_light;

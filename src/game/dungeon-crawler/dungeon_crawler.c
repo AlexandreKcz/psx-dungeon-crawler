@@ -165,7 +165,7 @@ short player_check_collision(){
     if(current_cell > 0) 
         return 1;
 
-    vector2 lookat_cell_position = vector_add(&dir, &player->position);
+    vector2 lookat_cell_position = vector2_add(&dir, &player->position);
 
     if(
         lookat_cell_position.vx < 0 || lookat_cell_position.vx > (sizeof(dungeon[0]) / sizeof(dungeon[0][0])) || 

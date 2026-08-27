@@ -9,6 +9,7 @@
 #include "../prims.h"
 #include "../types/array_list.h"
 #include "../sprite.h"
+#include "../camera.h"
 
 /// a lot of code here come's from Wituz's Ps1 Development tutorial : <https://github.com/Wituz/wituz-youtube/blob/master/ps1-game-tutorial/PART%209%20-%20CD%20Loading/project/constants.h>
 /// the fps counter is based on this code by sk-io : <https://github.com/sk-io/psx-engine/blob/main/src/main.c#L37>
@@ -64,6 +65,9 @@ void _initialize_screen() {
 
     lines_list = array_list_create(500, 5, sizeof(Line*));
     printf("array list max length : %i \n",lines_list->max_length);
+
+    if(USE_3D > 0)
+        _initialize_3D();
 }
 
 /**
@@ -121,6 +125,14 @@ void _initialize_ordering_table(){
 
     GsClearOt(0, 0, &ordering_tables[0]);
     GsClearOt(0, 0, &ordering_tables[1]);
+}
+
+void _initialize_3D(){
+    GsInit3D();
+    GsSetProjection(screen_width/2);
+    GsInitCoordinate2(WORLD, &Camera.coordinates);
+
+    GsSetLightMode(0); //apparently this is for fog, 0 = no fog, 1 = fog
 }
 
 /**

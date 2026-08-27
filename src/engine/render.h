@@ -7,6 +7,8 @@ void set_screen_mode(int mode);
 void _clear_vram();
 void _initialize_ordering_table();
 
+void _initialize_3D();
+
 void initialize_debug_font();
 void line_register(Line* line);
 

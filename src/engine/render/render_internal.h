@@ -13,3 +13,5 @@
 #define PACKETMAX 300
 
 #define PRIMS_ARRAY_SIZE 10
+
+#define USE_3D 1

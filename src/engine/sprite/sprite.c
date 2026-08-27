@@ -197,15 +197,15 @@ void sprite_set_scale_vector(Sprite* sprite, vector2 scale){
             Sprite* child = *(Sprite**) array_list_get(sprite->childs_list, c);
             //vector2 new_pos = vector_add(&position, &child->parent_link->local_position);
 
-            vector2 new_scale = vector_cross_multiply((vector2*) &VECTOR_ONE, &child->parent_link->local_scale, &scale);
+            vector2 new_scale = vector2_cross_multiply((vector2*) &VECTOR_ONE, &child->parent_link->local_scale, &scale);
             sprite_set_scale_vector(child, new_scale);
 
             vector2 parent_pos = sprite_get_position_vector(sprite);
             //sprite_scale_pivot(child, new_scale);
-            vector2 scaled_pos = vector_cross_multiply((vector2*) &VECTOR_ONE, &child->parent_link->local_position, &scale);
+            vector2 scaled_pos = vector2_cross_multiply((vector2*) &VECTOR_ONE, &child->parent_link->local_position, &scale);
 
 
-            vector2 new_pos = vector_add(&scaled_pos, &parent_pos);
+            vector2 new_pos = vector2_add(&scaled_pos, &parent_pos);
             sprite_set_position_vector(child, new_pos);
         }
     }
@@ -287,8 +287,8 @@ void sprite_set_position_vector(Sprite* sprite, vector2 position){
             Sprite* child = *(Sprite**) array_list_get(sprite->childs_list, c);
 
             vector2 parent_scale = sprite_get_scale(sprite);
-            vector2 scaled_local_pos = vector_cross_multiply((vector2*) &VECTOR_ONE, &child->parent_link->local_position, &parent_scale);
-            vector2 new_pos = vector_add(&position, &scaled_local_pos);
+            vector2 scaled_local_pos = vector2_cross_multiply((vector2*) &VECTOR_ONE, &child->parent_link->local_position, &parent_scale);
+            vector2 new_pos = vector2_add(&position, &scaled_local_pos);
 
             sprite_set_position_vector(child, new_pos);
         }
@@ -336,7 +336,7 @@ void sprite_set_y(Sprite *sprite, int y){
  */
 vector2 sprite_move_vector(Sprite *sprite, vector2 move){
     vector2 sprite_position = sprite_get_position_vector(sprite);
-    vector2 calculated_motion = vector_add(
+    vector2 calculated_motion = vector2_add(
         &sprite_position,
         &move
     );
@@ -354,7 +354,7 @@ void sprite_link(Sprite* parent, Sprite* child){
     vector2 child_position = sprite_get_position_vector(child);
     vector2 parent_position = sprite_get_position_vector(parent);
 
-    vector2 local_position = vector_substract(&child_position, &parent_position);
+    vector2 local_position = vector2_substract(&child_position, &parent_position);
 
     vector2 parent_scale = sprite_get_scale(parent);
     vector2 child_scale = sprite_get_scale(child);
@@ -363,8 +363,8 @@ void sprite_link(Sprite* parent, Sprite* child){
     SpriteLink* link = (SpriteLink*) malloc3(sizeof(SpriteLink)); 
 
     link->parent = parent;
-    link->local_position = vector_cross_multiply(&parent_scale, &local_position, (vector2*) &VECTOR_ONE);
-    link->local_scale = vector_cross_multiply(&parent_scale, &child_scale, (vector2*) &VECTOR_ONE);
+    link->local_position = vector2_cross_multiply(&parent_scale, &local_position, (vector2*) &VECTOR_ONE);
+    link->local_scale = vector2_cross_multiply(&parent_scale, &child_scale, (vector2*) &VECTOR_ONE);
 
     child->parent_link = link;
     array_list_append(parent->childs_list, &child);

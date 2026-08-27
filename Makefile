@@ -14,6 +14,7 @@ src/engine/controller/controller.c \
 src/engine/cd/cd.c \
 src/engine/sprite/sprite.c \
 src/engine/light/light.c \
+src/engine/camera/camera.c \
 src/game/dungeon-crawler/dungeon_crawler.c \
 src/game/game.c
 
