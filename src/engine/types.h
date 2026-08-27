@@ -15,6 +15,8 @@ typedef struct {
     int vy;
 } vector2_int;
 
+typedef VECTOR vector3;
+
 static const vector2 VECTOR_ONE = { .vx = ONE, .vy = ONE };
 
 void color_create(int r, int g, int b, Color** color);
