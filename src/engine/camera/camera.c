@@ -17,9 +17,13 @@ void calculate_camera(){
 
 void camera_set_position_vector(vector3 position){
     Camera.position = position;
+
+    calculate_camera();
 }
 
 void camera_set_rotation_vector(vector3 rotation){
     vector3_short converted_rotation = vector3_convert_to_vector3_short(&rotation);
     Camera.rotation = converted_rotation;
+
+    calculate_camera();
 }
